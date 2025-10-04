@@ -72,7 +72,7 @@ export class Segment extends Entity {
     addBullet() {
         if (this.segmentType === SegmentType.Head || this.segmentType === SegmentType.Tail) return;
 
-        if (this.ammoType === AmmoType.Basic) {
+        if (this.ammoType === AmmoType.Basic || this.ammoType === AmmoType.Dual) {
             const bulletDirection = perpendicularDirection(this.facing);
             const newPosition = getPositionInDirection(this.position, bulletDirection);
             const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
