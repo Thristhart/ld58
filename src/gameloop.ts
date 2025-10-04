@@ -31,18 +31,15 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
             timeSinceMove = 0;
             autoMoveTimer = 0;
             gameWorld.player.tryMove(Direction.West);
-        }
-        if (InputState.has("w")) {
+        } else if (InputState.has("w")) {
             timeSinceMove = 0;
             autoMoveTimer = 0;
             gameWorld.player.tryMove(Direction.North);
-        }
-        if (InputState.has("d")) {
+        } else if (InputState.has("d")) {
             timeSinceMove = 0;
             autoMoveTimer = 0;
             gameWorld.player.tryMove(Direction.East);
-        }
-        if (InputState.has("s")) {
+        } else if (InputState.has("s")) {
             timeSinceMove = 0;
             autoMoveTimer = 0;
             gameWorld.player.tryMove(Direction.South);
