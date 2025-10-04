@@ -8,6 +8,7 @@ import {
     perpendicularDirection,
     RelativeDirection,
     reverseDirection,
+    reversePerpendicularDirection,
 } from "#src/direction.ts";
 import { GameWorld } from "../gameworld";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
@@ -23,7 +24,15 @@ import segmentTailImageUrl from "#src/assets/snake/tail.png";
 import { Wall } from "./wall";
 import { Buzzsaw } from "./buzzsaw";
 import { Bullet } from "./bullet";
+import { Upgrade, UpgradeType } from "./upgrade";
+import { Enemy } from "./enemy";
 const segmentTailImage = loadImage(segmentTailImageUrl);
+
+enum AmmoType {
+    None = "None",
+    Basic = "Basic",
+    Dual = "Dual",
+}
 
 enum SegmentType {
     Head = "Head",
@@ -34,12 +43,15 @@ enum SegmentType {
 }
 export class Segment extends Entity {
     segmentType: SegmentType = SegmentType.Straight;
+    ammoType: AmmoType = AmmoType.Basic;
     timeSinceBullet = 0;
     timePerBullet = 1000;
 
-    constructor(position: Position, gameWorld: GameWorld, facing: Direction) {
+    constructor(position: Position, gameWorld: GameWorld, facing: Direction, ammoType: AmmoType) {
         super(position, gameWorld, facing);
+        this.ammoType = ammoType;
     }
+
     die() {
         // a segment died... disconnect everything behind it
         const myIndexInPlayer = this.gameWorld.player.otherSegments.indexOf(this);
@@ -59,10 +71,20 @@ export class Segment extends Entity {
 
     addBullet() {
         if (this.segmentType === SegmentType.Head || this.segmentType === SegmentType.Tail) return;
-        const bulletDirection = perpendicularDirection(this.facing);
-        const newPosition = getPositionInDirection(this.position, bulletDirection);
-        const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
-        this.gameWorld.addEntity(bullet);
+
+        if (this.ammoType === AmmoType.Basic) {
+            const bulletDirection = perpendicularDirection(this.facing);
+            const newPosition = getPositionInDirection(this.position, bulletDirection);
+            const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
+            this.gameWorld.addEntity(bullet);
+        }
+
+        if (this.ammoType === AmmoType.Dual) {
+            const bulletDirection = reversePerpendicularDirection(this.facing);
+            const newPosition = getPositionInDirection(this.position, bulletDirection);
+            const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
+            this.gameWorld.addEntity(bullet);
+        }
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
@@ -91,7 +113,7 @@ export class Player extends Segment {
     otherSegments: Segment[];
 
     constructor(position: Position, gameWorld: GameWorld, facing: Direction) {
-        super(position, gameWorld, facing);
+        super(position, gameWorld, facing, AmmoType.None);
         this.otherSegments = [];
         this.segmentType = SegmentType.Head;
     }
@@ -100,7 +122,7 @@ export class Player extends Segment {
         this.gameWorld.setGameState("isPaused", true);
         this.gameWorld.setGameState("dead", true);
     }
-    addSegment() {
+    addSegment(upgradeType?: UpgradeType) {
         let lastSegment;
         if (this.otherSegments.length > 0) {
             lastSegment = this.otherSegments[this.otherSegments.length - 1];
@@ -110,7 +132,11 @@ export class Player extends Segment {
         }
         const newPosition = getPositionInDirection(lastSegment.position, reverseDirection(lastSegment.facing));
 
-        const newSegment = new Segment(newPosition, this.gameWorld, lastSegment.facing);
+        let ammoType = AmmoType.Basic;
+        if (upgradeType === UpgradeType.DualAmmo) {
+            ammoType = AmmoType.Dual;
+        }
+        const newSegment = new Segment(newPosition, this.gameWorld, lastSegment.facing, ammoType);
         this.otherSegments.push(newSegment);
         this.gameWorld.addEntity(newSegment);
         newSegment.segmentType = SegmentType.Tail;
@@ -123,7 +149,10 @@ export class Player extends Segment {
             if (entity instanceof Pickup) {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
-            } else if (entity instanceof Buzzsaw) {
+            } else if (entity instanceof Upgrade) {
+                entity.consume(this);
+                this.gameWorld.removeEntity(entity);
+            } else if (entity instanceof Enemy) {
                 this.die();
             } else if (entity instanceof Segment || entity instanceof Wall) {
                 if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
