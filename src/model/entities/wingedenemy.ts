@@ -1,0 +1,50 @@
+import { getPositionInDirection, getRandomDirection, reverseDirection } from "#src/direction.ts";
+import { Enemy } from "./enemy";
+import { Wall } from "./wall";
+import { loadImage } from "#src/images.ts";
+
+import wingedEnemyUrl from "#src/assets/wingedenemy.png";
+import { drawRotatedImage } from "#src/drawRotatedImage.ts";
+import { Segment } from "./player";
+import { GRID_SQUARE_SIZE } from "#src/constants.ts";
+const wingedEnemyImage = loadImage(wingedEnemyUrl);
+
+export class WingedEnemy extends Enemy {
+    timeSinceMove = 0;
+    timePerMove = 200;
+
+    moveForward() {
+        const nextPosition = getPositionInDirection(this.position, this.facing);
+        const entitiesAtPos = this.gameWorld.getEntitiesAt(nextPosition);
+        for (const entity of entitiesAtPos) {
+            if (entity instanceof Wall) {
+                this.facing = reverseDirection(this.facing);
+                return;
+            }
+            if (entity instanceof Segment) {
+                entity.die();
+            }
+            if (entity instanceof Enemy) {
+                this.facing = getRandomDirection();
+            }
+        }
+
+        this.gameWorld.moveEntity(this, nextPosition);
+    }
+    think(dt: number): void {
+        this.timeSinceMove += dt;
+        if (this.timeSinceMove > this.timePerMove) {
+            this.timeSinceMove = 0;
+            this.moveForward();
+        }
+    }
+    draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
+        context.drawImage(
+            wingedEnemyImage,
+            this.position.x * GRID_SQUARE_SIZE,
+            this.position.y * GRID_SQUARE_SIZE,
+            GRID_SQUARE_SIZE,
+            GRID_SQUARE_SIZE
+        );
+    }
+}

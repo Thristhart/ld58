@@ -5,6 +5,7 @@ export interface GameState {
     dead: boolean;
     timePerAutomove: number;
     gameSpeed: number;
+    timePerEnemyAdd: number;
 }
 
 export const defaultGameState: GameState = {
@@ -14,4 +15,5 @@ export const defaultGameState: GameState = {
     dead: false,
     timePerAutomove: 75,
     gameSpeed: 1,
+    timePerEnemyAdd: 1000,
 };

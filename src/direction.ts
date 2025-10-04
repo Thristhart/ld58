@@ -119,3 +119,18 @@ export function getRelativeDirectionBetweenTwoDirections(from: Direction, to: Di
             }
     }
 }
+
+export function getRandomDirection() {
+    const rand = Math.floor(Math.random() * 4);
+    switch (rand) {
+        case 0:
+            return Direction.North;
+        case 1:
+            return Direction.East;
+        case 2:
+            return Direction.South;
+        case 3:
+        default:
+            return Direction.West;
+    }
+}

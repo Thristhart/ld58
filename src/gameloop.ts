@@ -1,5 +1,7 @@
-import { Direction } from "./direction";
+import { Direction, getRandomDirection } from "./direction";
+import { getRandomPositionNear } from "./distance";
 import { InputState, Input } from "./input";
+import { WingedEnemy } from "./model/entities/wingedenemy";
 import { GameWorld } from "./model/gameworld";
 
 let lastFrameTime = performance.now();
@@ -13,14 +15,18 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
     lastFrameTime = timestamp;
 }
 
+let enemyAddTimer = 0;
 let autoMoveTimer = 0;
 let ignoreNextAutomove = false;
+let simulationWindow = 20;
+let enemyNoSpawnWindow = 2;
 export let bufferedMoves: Input[] = [];
 let lastHandledMove: Input | undefined = undefined;
 
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;
+    enemyAddTimer += dt;
 
     updateInputs();
 
@@ -45,7 +51,15 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
         ignoreNextAutomove = false;
     }
 
-    const entitiesToSimulate = gameWorld.getEntitiesNear(gameWorld.player.position, 20);
+    if (enemyAddTimer >= gameWorld.getGameState("timePerEnemyAdd")) {
+        const newPosition = getRandomPositionNear(gameWorld.player.position, enemyNoSpawnWindow, simulationWindow);
+        const direction = getRandomDirection();
+        const enemy = new WingedEnemy(newPosition, gameWorld, direction);
+        gameWorld.addEntity(enemy);
+        enemyAddTimer = 0;
+    }
+
+    const entitiesToSimulate = gameWorld.getEntitiesNear(gameWorld.player.position, simulationWindow);
     for (const entity of entitiesToSimulate) {
         entity.think(dt);
     }
