@@ -18,14 +18,13 @@ let ignoreNextAutomove = false;
 export let bufferedMoves: Input[] = [];
 let lastHandledMove: Input | undefined = undefined;
 
-let timePerAutomove = 75;
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;
 
     updateInputs();
 
-    if (autoMoveTimer >= timePerAutomove) {
+    if (autoMoveTimer >= gameWorld.getGameState("timePerAutomove")) {
         let nextInput = bufferedMoves.shift();
 
         if (nextInput === "a" && gameWorld.player.facing !== Direction.East) {

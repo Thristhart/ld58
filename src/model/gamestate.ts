@@ -3,6 +3,7 @@ export interface GameState {
     dying: boolean;
     isPaused: boolean;
     dead: boolean;
+    timePerAutomove: number;
     gameSpeed: number;
 }
 
@@ -11,5 +12,6 @@ export const defaultGameState: GameState = {
     dying: false,
     isPaused: false,
     dead: false,
+    timePerAutomove: 75,
     gameSpeed: 1,
 };

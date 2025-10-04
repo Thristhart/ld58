@@ -36,6 +36,11 @@ export class GameWorld {
         this.stateChangeSubscriptions.get(property)?.forEach((callback) => callback());
     }
 
+    public addPoint(delta: number): void {
+        this.gameState["points"] = this.gameState.points + delta;
+        this.stateChangeSubscriptions.get("points")?.forEach((callback) => callback());
+    }
+
     getEntitiesNear(position: Position, distance: number) {
         return this.getEntitiesInArea({
             x: position.x - distance,

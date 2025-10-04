@@ -39,6 +39,19 @@ export function reverseDirection(direction: Direction) {
     }
 }
 
+export function perpendicularDirection(direction: Direction) {
+    switch (direction) {
+        case Direction.North:
+            return Direction.West;
+        case Direction.East:
+            return Direction.North;
+        case Direction.South:
+            return Direction.East;
+        case Direction.West:
+            return Direction.South;
+    }
+}
+
 // assumes they're 1 away, but mostly works otherwise
 export function getDirectionBetweenTwoPositions(from: Position, to: Position) {
     if (from.x < to.x) {

@@ -5,6 +5,7 @@ import {
     getDirectionBetweenTwoPositions,
     getPositionInDirection,
     getRelativeDirectionBetweenTwoDirections,
+    perpendicularDirection,
     RelativeDirection,
     reverseDirection,
 } from "#src/direction.ts";
@@ -21,6 +22,7 @@ const segmentCurveImage = loadImage(segmentCurveImageUrl);
 import segmentTailImageUrl from "#src/assets/snake/tail.png";
 import { Wall } from "./wall";
 import { Buzzsaw } from "./buzzsaw";
+import { Bullet } from "./bullet";
 const segmentTailImage = loadImage(segmentTailImageUrl);
 
 enum SegmentType {
@@ -32,6 +34,9 @@ enum SegmentType {
 }
 export class Segment extends Entity {
     segmentType: SegmentType = SegmentType.Straight;
+    timeSinceBullet = 0;
+    timePerBullet = 1000;
+
     constructor(position: Position, gameWorld: GameWorld, facing: Direction) {
         super(position, gameWorld, facing);
     }
@@ -42,6 +47,22 @@ export class Segment extends Entity {
             this.gameWorld.player.otherSegments.splice(myIndexInPlayer);
         }
         this.gameWorld.removeEntity(this);
+    }
+
+    think(dt: number): void {
+        this.timeSinceBullet += dt;
+        if (this.timeSinceBullet > this.timePerBullet) {
+            this.timeSinceBullet = 0;
+            this.addBullet();
+        }
+    }
+
+    addBullet() {
+        if (this.segmentType === SegmentType.Head || this.segmentType === SegmentType.Tail) return;
+        const bulletDirection = perpendicularDirection(this.facing);
+        const newPosition = getPositionInDirection(this.position, bulletDirection);
+        const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
+        this.gameWorld.addEntity(bullet);
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
