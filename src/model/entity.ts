@@ -21,6 +21,7 @@ export class Entity {
             GRID_SQUARE_SIZE
         );
     }
+    think(dt: number) {}
 }
 
 export interface Position {

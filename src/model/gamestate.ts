@@ -3,6 +3,7 @@ export interface GameState {
     dying: boolean;
     isPaused: boolean;
     dead: boolean;
+    gameSpeed: number;
 }
 
 export const defaultGameState: GameState = {
@@ -10,4 +11,5 @@ export const defaultGameState: GameState = {
     dying: false,
     isPaused: false,
     dead: false,
+    gameSpeed: 1,
 };

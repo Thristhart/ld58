@@ -10,6 +10,7 @@ import { GameState } from "./model/gamestate";
 import { Interface } from "./Interface/Interface";
 import { Position } from "./model/entity";
 import { Wall } from "./model/entities/wall";
+import { Buzzsaw } from "./model/entities/buzzsaw";
 
 function createRoom(gameWorld: GameWorld, centerX: number, centerY: number, size: number) {
     let candidates: Position[] = [];
@@ -45,6 +46,8 @@ function createGameWorld() {
     gameWorld.player.addSegment();
     gameWorld.player.addSegment();
     gameWorld.player.tryMove(Direction.North);
+
+    gameWorld.addEntity(new Buzzsaw({ x: 5, y: 5 }, gameWorld));
 
     for (let x = -20; x < 20; x++) {
         for (let y = -20; y < 20; y++) {
