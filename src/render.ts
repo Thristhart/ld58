@@ -16,6 +16,9 @@ export function drawFrame(
     frameTimeIndex %= frameDurationsSampleCount;
     const averageFrameTime = frameDurations.reduce((prev, current) => prev + current) / frameDurations.length;
 
+    camera.x = gameWorld.player.position.x * GRID_SQUARE_SIZE;
+    camera.y = gameWorld.player.position.y * GRID_SQUARE_SIZE;
+
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     context.save();

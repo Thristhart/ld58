@@ -1,4 +1,5 @@
 import { Player } from "./entities/player";
+import { TileEntity } from "./entities/tile";
 import { Entity, Position } from "./entity";
 import { defaultGameState, GameState } from "./gamestate";
 
@@ -51,7 +52,7 @@ export class GameWorld {
     }
 
     getEntitiesAt(position: Position) {
-        return this.entities.get(`${position.x},${position.y}`) ?? [];
+        return this.entities.get(`${position.x},${position.y}`) ?? new Set();
     }
 
     addEntity(entity: Entity) {
@@ -74,6 +75,41 @@ export class GameWorld {
         this.entities.set(newPosStr, entitiesAtNewPos);
 
         entity.position = newPosition;
+    }
+
+    removeEntity(entity: Entity) {
+        this.getEntitiesAt(entity.position).delete(entity);
+        this.cleanEntities();
+    }
+
+    getRandomEmptyPositionNearPlayer() {
+        const distance = 3;
+        while (true) {
+            const candidate = {
+                x: this.player.position.x - distance + Math.floor(distance * 2 * Math.random()),
+                y: this.player.position.y - distance + Math.floor(distance * 2 * Math.random()),
+            };
+            const entitiesAtPos = this.getEntitiesAt(candidate);
+            let notTileEntity = false;
+            for (const entity of entitiesAtPos.values()) {
+                if (!(entity instanceof TileEntity)) {
+                    notTileEntity = true;
+                    continue;
+                }
+            }
+            if (notTileEntity) {
+                continue;
+            }
+            return candidate;
+        }
+    }
+
+    private cleanEntities() {
+        this.entities.forEach((value, key) => {
+            if (value.size === 0) {
+                this.entities.delete(key);
+            }
+        });
     }
 
     static isPointWithinBox(point: Position, box: { x: number; y: number; w: number; h: number }) {

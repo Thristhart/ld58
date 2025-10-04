@@ -18,6 +18,7 @@ const segmentStraightImage = loadImage(segmentStraightImageUrl);
 import segmentCurveImageUrl from "#src/assets/snake/segment_curve.png";
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
 import segmentTailImageUrl from "#src/assets/snake/tail.png";
+import { Pickup } from "../pickup";
 const segmentTailImage = loadImage(segmentTailImageUrl);
 
 enum SegmentType {
@@ -83,6 +84,12 @@ export class Player extends Segment {
         const nextPosition = getPositionInDirection(this.position, direction);
 
         const entitiesAtPos = this.gameWorld.getEntitiesAt(nextPosition);
+        for (const entity of entitiesAtPos) {
+            if (entity instanceof Pickup) {
+                entity.consume(this);
+                this.gameWorld.removeEntity(entity);
+            }
+        }
         // TODO: handle collision
 
         let lastPosition = nextPosition;
