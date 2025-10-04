@@ -16,7 +16,7 @@ let ignoreNextAutomove = false;
 let bufferedMoves: Input[] = [];
 let lastHandledMove: Input | undefined = undefined;
 
-let timePerAutomove = 150;
+let timePerAutomove = 75;
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;

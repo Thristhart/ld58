@@ -90,11 +90,19 @@ export class Player extends Segment {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
             } else if (entity instanceof Segment || entity instanceof Wall) {
-                this.gameWorld.setGameState("isPaused", true);
-                this.gameWorld.setGameState("dead", true);
+                console.log(this.facing, direction);
+
+                if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
+                    this.gameWorld.setGameState("isPaused", true);
+                    this.gameWorld.setGameState("dead", true);
+                } else {
+                    this.gameWorld.setGameState("dying", true);
+                    return;
+                }
             }
         }
 
+        this.gameWorld.setGameState("dying", false);
         let lastPosition = nextPosition;
         let nextType = SegmentType.Head;
 
