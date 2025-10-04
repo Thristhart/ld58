@@ -1,6 +1,5 @@
-import { Dir } from "fs";
 import { Direction } from "./direction";
-import { InputState } from "./input";
+import { InputState, Input } from "./input";
 import { GameWorld } from "./model/gameworld";
 
 let lastFrameTime = performance.now();
@@ -15,29 +14,42 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
 
 let autoMoveTimer = 0;
 let ignoreNextAutomove = false;
+let bufferedMoves: Input[] = [];
 
 let timePerAutomove = 75;
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;
 
-    if (InputState.has("a")) {
-        nextFacing = Direction.West;
-    } else if (InputState.has("w")) {
-        nextFacing = Direction.North;
-    } else if (InputState.has("d")) {
-        nextFacing = Direction.East;
-    } else if (InputState.has("s")) {
-        nextFacing = Direction.South;
-    } else {
-        nextFacing = undefined;
-    }
+    if (!gameWorld.getGameState("isPaused")) {
+        updateInputs();
 
-    if (autoMoveTimer >= timePerAutomove) {
-        if (!ignoreNextAutomove) {
-            gameWorld.player.tryMove(nextFacing ?? gameWorld.player.facing);
-            autoMoveTimer = 0;
+        if (autoMoveTimer >= timePerAutomove) {
+            let nextInput = bufferedMoves.shift();
+
+            if (nextInput === "a" && gameWorld.player.facing !== Direction.East) {
+                nextFacing = Direction.West;
+            } else if (nextInput === "w" && gameWorld.player.facing !== Direction.South) {
+                nextFacing = Direction.North;
+            } else if (nextInput === "d" && gameWorld.player.facing !== Direction.West) {
+                nextFacing = Direction.East;
+            } else if (nextInput === "s" && gameWorld.player.facing !== Direction.North) {
+                nextFacing = Direction.South;
+            } else {
+                nextFacing = undefined;
+            }
+            if (!ignoreNextAutomove) {
+                gameWorld.player.tryMove(nextFacing ?? gameWorld.player.facing);
+                autoMoveTimer = 0;
+            }
+            ignoreNextAutomove = false;
         }
-        ignoreNextAutomove = false;
+    }
+}
+
+function updateInputs() {
+    let lastInput = [...InputState].at(-1);
+    if (bufferedMoves.at(-1) != lastInput && lastInput !== undefined) {
+        bufferedMoves.push(lastInput);
     }
 }

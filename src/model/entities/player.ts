@@ -88,6 +88,8 @@ export class Player extends Segment {
             if (entity instanceof Pickup) {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
+            } else if (entity instanceof Segment) {
+                this.gameWorld.setGameState("isPaused", true);
             }
         }
         // TODO: handle collision

@@ -1,7 +1,9 @@
 export interface GameState {
-    points: number
+    points: number;
+    isPaused: boolean;
 }
 
 export const defaultGameState = {
-    points: 0
-}
+    points: 0,
+    isPaused: false,
+};
