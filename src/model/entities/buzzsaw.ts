@@ -5,6 +5,7 @@ import { loadImage } from "#src/images.ts";
 
 import buzzsawImageUrl from "#src/assets/buzzsaw.png";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
+import { Player, Segment } from "./player";
 const buzzsawImage = loadImage(buzzsawImageUrl);
 
 export class Buzzsaw extends Enemy {
@@ -18,6 +19,9 @@ export class Buzzsaw extends Enemy {
             if (entity instanceof Wall) {
                 this.facing = reverseDirection(this.facing);
                 return;
+            }
+            if (entity instanceof Segment) {
+                entity.die();
             }
         }
 

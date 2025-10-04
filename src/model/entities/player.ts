@@ -20,6 +20,7 @@ import segmentCurveImageUrl from "#src/assets/snake/segment_curve.png";
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
 import segmentTailImageUrl from "#src/assets/snake/tail.png";
 import { Wall } from "./wall";
+import { Buzzsaw } from "./buzzsaw";
 const segmentTailImage = loadImage(segmentTailImageUrl);
 
 enum SegmentType {
@@ -33,6 +34,14 @@ export class Segment extends Entity {
     segmentType: SegmentType = SegmentType.Straight;
     constructor(position: Position, gameWorld: GameWorld, facing: Direction) {
         super(position, gameWorld, facing);
+    }
+    die() {
+        // a segment died... disconnect everything behind it
+        const myIndexInPlayer = this.gameWorld.player.otherSegments.indexOf(this);
+        if (myIndexInPlayer != -1) {
+            this.gameWorld.player.otherSegments.splice(myIndexInPlayer);
+        }
+        this.gameWorld.removeEntity(this);
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
@@ -66,6 +75,10 @@ export class Player extends Segment {
         this.segmentType = SegmentType.Head;
     }
 
+    die() {
+        this.gameWorld.setGameState("isPaused", true);
+        this.gameWorld.setGameState("dead", true);
+    }
     addSegment() {
         let lastSegment;
         if (this.otherSegments.length > 0) {
@@ -89,12 +102,11 @@ export class Player extends Segment {
             if (entity instanceof Pickup) {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
+            } else if (entity instanceof Buzzsaw) {
+                this.die();
             } else if (entity instanceof Segment || entity instanceof Wall) {
-                console.log(this.facing, direction);
-
                 if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
-                    this.gameWorld.setGameState("isPaused", true);
-                    this.gameWorld.setGameState("dead", true);
+                    this.die();
                 } else {
                     this.gameWorld.setGameState("dying", true);
                     return;
@@ -107,7 +119,7 @@ export class Player extends Segment {
         let nextType = SegmentType.Head;
 
         const segments = [this, ...this.otherSegments];
-        segments.forEach((segment, index) => {
+        for (const segment of segments) {
             const next = lastPosition;
             const newFacing = getDirectionBetweenTwoPositions(segment.position, next);
             const relativeDirection = getRelativeDirectionBetweenTwoDirections(segment.facing, newFacing);
@@ -123,10 +135,12 @@ export class Player extends Segment {
             segment.facing = newFacing;
             lastPosition = { ...segment.position };
             this.gameWorld.moveEntity(segment, next);
-        });
-        const tail = segments[segments.length - 1];
-        const beforeTail = segments[segments.length - 2];
-        tail.segmentType = SegmentType.Tail;
-        tail.facing = beforeTail.facing;
+        }
+        if (segments.length > 1) {
+            const tail = segments[segments.length - 1];
+            const beforeTail = segments[segments.length - 2];
+            tail.segmentType = SegmentType.Tail;
+            tail.facing = beforeTail.facing;
+        }
     }
 }
