@@ -1,5 +1,5 @@
-import { Player } from "./entities/player";
-import { Entity } from "./entity";
+import { Player } from "./player";
+import { Entity } from "../entity";
 import { loadImage } from "#src/images.ts";
 
 import pickupImageUrl from "#src/assets/pickup.png";

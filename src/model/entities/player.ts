@@ -10,6 +10,7 @@ import {
 } from "#src/direction.ts";
 import { GameWorld } from "../gameworld";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
+import { Pickup } from "./pickup";
 
 import headImageUrl from "#src/assets/snake/head.png";
 const headImage = loadImage(headImageUrl);
@@ -18,7 +19,7 @@ const segmentStraightImage = loadImage(segmentStraightImageUrl);
 import segmentCurveImageUrl from "#src/assets/snake/segment_curve.png";
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
 import segmentTailImageUrl from "#src/assets/snake/tail.png";
-import { Pickup } from "../pickup";
+import { Wall } from "./wall";
 const segmentTailImage = loadImage(segmentTailImageUrl);
 
 enum SegmentType {
@@ -88,12 +89,11 @@ export class Player extends Segment {
             if (entity instanceof Pickup) {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
-            } else if (entity instanceof Segment) {
+            } else if (entity instanceof Segment || entity instanceof Wall) {
                 this.gameWorld.setGameState("isPaused", true);
                 return;
             }
         }
-        // TODO: handle collision
 
         let lastPosition = nextPosition;
         let nextType = SegmentType.Head;
