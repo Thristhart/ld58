@@ -90,6 +90,7 @@ export class Player extends Segment {
                 this.gameWorld.removeEntity(entity);
             } else if (entity instanceof Segment) {
                 this.gameWorld.setGameState("isPaused", true);
+                return;
             }
         }
         // TODO: handle collision
