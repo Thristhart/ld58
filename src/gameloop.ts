@@ -1,3 +1,4 @@
+import { Dir } from "fs";
 import { Direction } from "./direction";
 import { InputState } from "./input";
 import { GameWorld } from "./model/gameworld";
@@ -13,36 +14,30 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
 }
 
 let autoMoveTimer = 0;
-let timeSinceMove = 0;
+let ignoreNextAutomove = false;
 
-let timePerAutomove = 1500;
-let timePerMove = 500;
+let timePerAutomove = 75;
+let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;
-    timeSinceMove += dt;
 
-    if (autoMoveTimer >= timePerAutomove) {
-        gameWorld.player.tryMove(gameWorld.player.facing);
-        autoMoveTimer = 0;
+    if (InputState.has("a")) {
+        nextFacing = Direction.West;
+    } else if (InputState.has("w")) {
+        nextFacing = Direction.North;
+    } else if (InputState.has("d")) {
+        nextFacing = Direction.East;
+    } else if (InputState.has("s")) {
+        nextFacing = Direction.South;
+    } else {
+        nextFacing = undefined;
     }
 
-    if (timeSinceMove >= timePerMove) {
-        if (InputState.has("a")) {
-            timeSinceMove = 0;
+    if (autoMoveTimer >= timePerAutomove) {
+        if (!ignoreNextAutomove) {
+            gameWorld.player.tryMove(nextFacing ?? gameWorld.player.facing);
             autoMoveTimer = 0;
-            gameWorld.player.tryMove(Direction.West);
-        } else if (InputState.has("w")) {
-            timeSinceMove = 0;
-            autoMoveTimer = 0;
-            gameWorld.player.tryMove(Direction.North);
-        } else if (InputState.has("d")) {
-            timeSinceMove = 0;
-            autoMoveTimer = 0;
-            gameWorld.player.tryMove(Direction.East);
-        } else if (InputState.has("s")) {
-            timeSinceMove = 0;
-            autoMoveTimer = 0;
-            gameWorld.player.tryMove(Direction.South);
         }
+        ignoreNextAutomove = false;
     }
 }
