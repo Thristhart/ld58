@@ -47,7 +47,7 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
     }
 }
 
-function updateInputs() {
+export function updateInputs() {
     let lastInput = [...InputState].at(-1);
     if (bufferedMoves.at(-1) != lastInput && lastInput !== undefined) {
         bufferedMoves.push(lastInput);

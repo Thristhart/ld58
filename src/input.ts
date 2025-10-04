@@ -1,3 +1,5 @@
+import { updateInputs } from "./gameloop";
+
 const inputs = ["w", "a", "s", "d"] as const;
 
 function isSupportedInput(input: string): input is Input {
@@ -24,6 +26,7 @@ function onKeyDown(event: KeyboardEvent) {
     if (event.key === "ArrowDown") {
         InputState.add("s");
     }
+    updateInputs();
 }
 function onKeyUp(event: KeyboardEvent) {
     if (isSupportedInput(event.key.toLowerCase())) {
