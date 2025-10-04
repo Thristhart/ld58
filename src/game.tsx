@@ -110,7 +110,9 @@ function DeathDialog(props: DeathDialogProps) {
             <section>
                 <h2>Game Over</h2>
                 <p>Try again?</p>
-                <button onClick={props.restart}>Retry</button>
+                <button onClick={props.restart} autoFocus>
+                    Retry
+                </button>
             </section>
         </dialog>
     );
