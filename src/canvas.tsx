@@ -9,12 +9,14 @@ function useFitCanvasToWindow(canvasRef: React.RefObject<HTMLCanvasElement | nul
             return;
         }
         const canvas = canvasRef.current;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const parentRect = canvas.parentElement?.getBoundingClientRect();
+        canvas.width = parentRect?.width || 0;
+        canvas.height = parentRect?.height || 0;
 
         const onResize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const parentRect = canvas.parentElement?.getBoundingClientRect();
+            canvas.width = parentRect?.width || 0;
+            canvas.height = parentRect?.height || 0;
         };
         window.addEventListener("resize", onResize, { passive: true });
         return () => {

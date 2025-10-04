@@ -11,3 +11,20 @@ body {
     width: 100%;
     height: 100%;
 }
+
+.Container{ 
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.Interface {
+    width: 500px;
+    min-width: 500px;
+    background-color: orange;
+    z-index: 2;
+}
+
+.CanvasContainer {
+    width:calc(100% - 500px);
+}

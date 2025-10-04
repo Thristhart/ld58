@@ -23,5 +23,12 @@ function useGameWorld() {
 
 export function Game() {
     const gameWorld = useGameWorld();
-    return <Canvas gameWorld={gameWorld} />;
+    return(
+        <div className="Container">
+            <div className="Interface">REACTUI</div>
+            <div className="CanvasContainer">
+                <Canvas gameWorld={gameWorld} />
+            </div>
+        </div>
+    );
 }
