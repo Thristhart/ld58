@@ -2,10 +2,10 @@ import { Entity, Position } from "./entity";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
-    private entities: Map<PositionString, Entity[]>;
+    private entities: Map<PositionString, Set<Entity>>;
 
     constructor() {
-        this.entities = new Map<PositionString, Entity[]>();
+        this.entities = new Map<PositionString, Set<Entity>>();
     }
 
     getEntitiesNear(position: Position, distance: number) {
@@ -32,8 +32,8 @@ export class GameWorld {
 
     addEntity(entity: Entity) {
         const posStr = `${entity.position.x},${entity.position.y}` as const;
-        const entitiesAtPos = this.entities.get(posStr) ?? [];
-        entitiesAtPos.push(entity);
+        const entitiesAtPos = this.entities.get(posStr) ?? new Set<Entity>();
+        entitiesAtPos.add(entity);
         this.entities.set(posStr, entitiesAtPos);
     }
 

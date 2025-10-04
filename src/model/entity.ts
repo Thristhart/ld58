@@ -2,11 +2,11 @@ import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 
 export class Entity {
     position: Position;
-    direction: EntityDirection;
+    facing: EntityDirection;
 
-    constructor(position: Position, direction: EntityDirection = EntityDirection.North) {
+    constructor(position: Position, facing: EntityDirection = EntityDirection.North) {
         this.position = position;
-        this.direction = direction;
+        this.facing = facing;
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
