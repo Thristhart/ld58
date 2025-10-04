@@ -5,7 +5,7 @@ import { GameWorld } from "./model/gameworld";
 import { Pickup } from "./model/entities/pickup";
 import { Player } from "./model/entities/player";
 import { Direction } from "#src/direction.ts";
-import { tick } from "./gameloop";
+import { bufferedMoves, tick } from "./gameloop";
 import { GameState } from "./model/gamestate";
 import { Interface } from "./Interface/Interface";
 import { Position } from "./model/entity";
@@ -83,6 +83,7 @@ function useGameWorld() {
 
     const restart = () => {
         setGameWorld(createGameWorld);
+        bufferedMoves.splice(0);
     };
 
     useEffect(() => {
