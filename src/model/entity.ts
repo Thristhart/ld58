@@ -1,12 +1,16 @@
-import { xor } from "lodash";
+import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 
 export class Entity {
-    position: { x: number; y: number };
+    position: Position;
     direction: EntityDirection;
 
-    constructor(position: { x: number; y: number }, direction: EntityDirection = EntityDirection.North) {
+    constructor(position: Position, direction: EntityDirection = EntityDirection.North) {
         this.position = position;
         this.direction = direction;
+    }
+
+    draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+        context.fillRect(this.position.x, this.position.y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
     }
 }
 
@@ -17,12 +21,7 @@ export enum EntityDirection {
     West,
 }
 
-export class Position {
+export interface Position {
     x: number;
     y: number;
-
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
 }
