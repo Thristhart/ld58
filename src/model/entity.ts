@@ -1,11 +1,15 @@
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
+import { GameWorld } from "./gameworld";
+import { Direction } from "#src/direction.ts";
 
 export class Entity {
     position: Position;
-    facing: EntityDirection;
+    facing: Direction;
+    gameWorld: GameWorld;
 
-    constructor(position: Position, facing: EntityDirection = EntityDirection.North) {
+    constructor(position: Position, gameWorld: GameWorld, facing: Direction = Direction.North) {
         this.position = position;
+        this.gameWorld = gameWorld;
         this.facing = facing;
     }
 
@@ -17,13 +21,6 @@ export class Entity {
             GRID_SQUARE_SIZE
         );
     }
-}
-
-export enum EntityDirection {
-    North,
-    East,
-    South,
-    West,
 }
 
 export interface Position {
