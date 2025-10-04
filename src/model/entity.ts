@@ -10,7 +10,12 @@ export class Entity {
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-        context.fillRect(this.position.x, this.position.y, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+        context.fillRect(
+            this.position.x * GRID_SQUARE_SIZE,
+            this.position.y * GRID_SQUARE_SIZE,
+            GRID_SQUARE_SIZE,
+            GRID_SQUARE_SIZE
+        );
     }
 }
 

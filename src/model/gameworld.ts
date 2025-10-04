@@ -9,10 +9,18 @@ export class GameWorld {
     }
 
     getEntitiesNear(position: Position, distance: number) {
+        return this.getEntitiesInArea({
+            x: position.x - distance,
+            y: position.y - distance,
+            w: distance * 2,
+            h: distance * 2,
+        });
+    }
+    getEntitiesInArea(box: { x: number; y: number; w: number; h: number }) {
         const result: Entity[] = [];
-        for (let x = position.x - distance; x++; x < position.x + distance) {
-            for (let y = position.y - distance; y++; y < position.y + distance) {
-                result.concat(...this.getEntitiesAt({ x, y }));
+        for (let x = box.x; x <= box.x + box.w; x++) {
+            for (let y = box.y; y <= box.y + box.h; y++) {
+                result.push(...this.getEntitiesAt({ x, y }));
             }
         }
         return result;

@@ -1,11 +1,17 @@
 import { camera } from "./camera";
 import { GRID_SQUARE_SIZE } from "./constants";
+import { GameWorld } from "./model/gameworld";
 
 const frameDurations: number[] = new Array();
 const frameDurationsSampleCount = 20;
 let frameTimeIndex = 0;
 
-export function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+export function drawFrame(
+    dt: number,
+    canvas: HTMLCanvasElement,
+    context: CanvasRenderingContext2D,
+    gameWorld: GameWorld
+) {
     frameDurations[frameTimeIndex++] = dt;
     frameTimeIndex %= frameDurationsSampleCount;
     const averageFrameTime = frameDurations.reduce((prev, current) => prev + current) / frameDurations.length;
@@ -36,6 +42,22 @@ export function drawFrame(dt: number, canvas: HTMLCanvasElement, context: Canvas
         context.lineTo(1000, y * GRID_SQUARE_SIZE);
         context.closePath();
         context.stroke();
+    }
+
+    const cameraX = Math.floor(camera.x / GRID_SQUARE_SIZE);
+    const cameraY = Math.floor(camera.y / GRID_SQUARE_SIZE);
+    const halfWisibleWidth = Math.ceil(canvas.width / camera.scale / GRID_SQUARE_SIZE / 2);
+    const halfVisibleHeight = Math.ceil(canvas.height / camera.scale / GRID_SQUARE_SIZE / 2);
+
+    const visibleEntities = gameWorld.getEntitiesInArea({
+        x: cameraX - halfWisibleWidth,
+        y: cameraY - halfVisibleHeight,
+        w: halfWisibleWidth * 2,
+        h: halfVisibleHeight * 2,
+    });
+
+    for (const ent of visibleEntities) {
+        ent.draw(context, canvas);
     }
 
     context.restore();
