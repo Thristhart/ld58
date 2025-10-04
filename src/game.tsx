@@ -19,10 +19,7 @@ function createGameWorld() {
     gameWorld.player.addSegment();
     gameWorld.player.addSegment();
     gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
+    gameWorld.player.tryMove(Direction.North);
 
     // @ts-ignore
     window.DEBUG_gameWorld = gameWorld;

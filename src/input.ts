@@ -12,10 +12,34 @@ function onKeyDown(event: KeyboardEvent) {
     if (isSupportedInput(event.key.toLowerCase())) {
         InputState.add(event.key.toLowerCase() as Input);
     }
+    if (event.key === "ArrowLeft") {
+        InputState.add("a");
+    }
+    if (event.key === "ArrowRight") {
+        InputState.add("d");
+    }
+    if (event.key === "ArrowUp") {
+        InputState.add("w");
+    }
+    if (event.key === "ArrowDown") {
+        InputState.add("s");
+    }
 }
 function onKeyUp(event: KeyboardEvent) {
     if (isSupportedInput(event.key.toLowerCase())) {
         InputState.delete(event.key.toLowerCase() as Input);
+    }
+    if (event.key === "ArrowLeft") {
+        InputState.delete("a");
+    }
+    if (event.key === "ArrowRight") {
+        InputState.delete("d");
+    }
+    if (event.key === "ArrowUp") {
+        InputState.delete("w");
+    }
+    if (event.key === "ArrowDown") {
+        InputState.delete("s");
     }
 }
 
