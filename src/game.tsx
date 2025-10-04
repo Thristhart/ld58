@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { Canvas } from "./canvas";
 import "./game.css";
 import { GameWorld } from "./model/gameworld";
@@ -6,6 +6,8 @@ import { Pickup } from "./model/pickup";
 import { Player } from "./model/entities/player";
 import { Direction } from "#src/direction.ts";
 import { tick } from "./gameloop";
+import { GameState } from "./model/gamestate";
+import { Interface } from "./Interface/Interface";
 
 function createGameWorld() {
     const gameWorld = new GameWorld();
@@ -33,14 +35,34 @@ function createGameWorld() {
 function useGameWorld() {
     const [gameWorld] = useState(createGameWorld);
 
-    return gameWorld;
+    const getGameState = useCallback(
+        (key: keyof GameState) => {
+            return useSyncExternalStore(
+                (onStoreChange: () => void) => {
+                    gameWorld.subscribeToStateChange(key, onStoreChange);
+                    return () => gameWorld.unsubscribeFromStateChange(key, onStoreChange);
+                },
+                () => gameWorld.getGameState(key)
+            );
+        },
+        [gameWorld]
+    );
+
+    const setGameState = useCallback(
+        (property: keyof GameState, value: GameState[keyof GameState]) => {
+            gameWorld.setGameState(property, value);
+        },
+        [gameWorld]
+    );
+
+    return { gameWorld, getGameState, setGameState };
 }
 
 export function Game() {
-    const gameWorld = useGameWorld();
-    return(
+    const { gameWorld, getGameState, setGameState } = useGameWorld();
+    return (
         <div className="Container">
-            <div className="Interface">REACTUI</div>
+            <Interface getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
                 <Canvas gameWorld={gameWorld} />
             </div>

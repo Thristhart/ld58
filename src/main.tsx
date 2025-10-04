@@ -7,7 +7,6 @@ let reactRoot: Root;
 async function startup() {
     reactRoot = createRoot(root);
     reactRoot.render(<Game />);
-
 }
 
 startup();

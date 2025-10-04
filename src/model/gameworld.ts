@@ -1,13 +1,35 @@
 import { Player } from "./entities/player";
 import { Entity, Position } from "./entity";
+import { defaultGameState, GameState } from "./gamestate";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
     private entities: Map<PositionString, Set<Entity>>;
     public player!: Player;
+    private gameState: GameState = defaultGameState;
+    private stateChangeSubscriptions = new Map<string, Set<() => void>>();
 
     constructor() {
         this.entities = new Map<PositionString, Set<Entity>>();
+    }
+
+    public subscribeToStateChange<K extends keyof GameState>(property: K, onStoreChange: () => void) {
+        const setSubscriptions = this.stateChangeSubscriptions.get(property) ?? new Set();
+        setSubscriptions.add(onStoreChange);
+        this.stateChangeSubscriptions.set(property, setSubscriptions);
+    }
+
+    public unsubscribeFromStateChange<K extends keyof GameState>(property: K, onStoreChange: () => void) {
+        this.stateChangeSubscriptions.get(property)?.delete(onStoreChange);
+    }
+
+    public getGameState<K extends keyof GameState>(property: K): GameState[K] {
+        return this.gameState[property];
+    }
+
+    public setGameState<K extends keyof GameState>(property: K, value: GameState[K]): void {
+        this.gameState[property] = value;
+        this.stateChangeSubscriptions.get(property)?.forEach((callback) => callback());
     }
 
     getEntitiesNear(position: Position, distance: number) {
