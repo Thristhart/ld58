@@ -68,6 +68,7 @@ export class Player extends Segment {
         let lastSegment;
         if (this.otherSegments.length > 0) {
             lastSegment = this.otherSegments[this.otherSegments.length - 1];
+            lastSegment.segmentType = SegmentType.Straight;
         } else {
             lastSegment = this;
         }
@@ -76,6 +77,7 @@ export class Player extends Segment {
         const newSegment = new Segment(newPosition, this.gameWorld, lastSegment.facing);
         this.otherSegments.push(newSegment);
         this.gameWorld.addEntity(newSegment);
+        newSegment.segmentType = SegmentType.Tail;
     }
     tryMove(direction: Direction) {
         const nextPosition = getPositionInDirection(this.position, direction);
