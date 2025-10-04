@@ -2,17 +2,17 @@ import { Entity, Position } from "./entity";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
-    private entities: Map<PositionString, Entity[]>;
+    private entities: Map<PositionString, Set<Entity>>;
 
     constructor() {
-        this.entities = new Map<PositionString, Entity[]>();
+        this.entities = new Map<PositionString, Set<Entity>>();
     }
 
     getEntitiesNear(position: Position, distance: number) {
         const result: Entity[] = [];
         for (let x = position.x - distance; x++; x < position.x + distance) {
             for (let y = position.y - distance; y++; y < position.y + distance) {
-                result.concat(...this.getEntitiesAt({ x, y }));
+                result.push(...this.getEntitiesAt({ x, y }));
             }
         }
         return result;
@@ -24,8 +24,8 @@ export class GameWorld {
 
     addEntity(entity: Entity) {
         const posStr = `${entity.position.x},${entity.position.y}` as const;
-        const entitiesAtPos = this.entities.get(posStr) ?? [];
-        entitiesAtPos.push(entity);
+        const entitiesAtPos = this.entities.get(posStr) ?? new Set<Entity>();
+        entitiesAtPos.add(entity);
         this.entities.set(posStr, entitiesAtPos);
     }
 
