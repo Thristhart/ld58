@@ -15,8 +15,9 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
 let autoMoveTimer = 0;
 let ignoreNextAutomove = false;
 let bufferedMoves: Input[] = [];
+let lastHandledMove: Input | undefined = undefined;
 
-let timePerAutomove = 75;
+let timePerAutomove = 150;
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;
@@ -49,7 +50,8 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
 
 export function updateInputs() {
     let lastInput = [...InputState].at(-1);
-    if (bufferedMoves.at(-1) != lastInput && lastInput !== undefined) {
+    if (lastHandledMove != lastInput && lastInput !== undefined && bufferedMoves.length < 3) {
         bufferedMoves.push(lastInput);
+        lastHandledMove = lastInput;
     }
 }
