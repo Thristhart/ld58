@@ -13,7 +13,7 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
 
 let autoMoveTimer = 0;
 let ignoreNextAutomove = false;
-let bufferedMoves: Input[] = [];
+export let bufferedMoves: Input[] = [];
 let lastHandledMove: Input | undefined = undefined;
 
 let timePerAutomove = 75;
