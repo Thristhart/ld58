@@ -33,7 +33,7 @@ function useGameWorld() {
     const [gameWorld] = useState(createGameWorld);
 
     const getGameState = useCallback(
-        (key: keyof GameState) => {
+        <K extends keyof GameState>(key: K) => {
             return useSyncExternalStore(
                 (onStoreChange: () => void) => {
                     gameWorld.subscribeToStateChange(key, onStoreChange);
