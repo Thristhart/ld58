@@ -4,7 +4,6 @@ import { GameWorld } from "./model/gameworld";
 
 let lastFrameTime = performance.now();
 export function tick(gameWorld: GameWorld, timestamp: number) {
-    requestAnimationFrame((timestamp) => tick(gameWorld, timestamp));
     const dt = timestamp - lastFrameTime;
 
     advanceGame(gameWorld, dt);
