@@ -91,7 +91,7 @@ export class Player extends Segment {
                 this.gameWorld.removeEntity(entity);
             } else if (entity instanceof Segment || entity instanceof Wall) {
                 this.gameWorld.setGameState("isPaused", true);
-                return;
+                this.gameWorld.setGameState("dead", true);
             }
         }
 

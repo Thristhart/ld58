@@ -52,7 +52,7 @@ function useDrawLoop(canvasRef: React.RefObject<HTMLCanvasElement | null>, gameW
         frameHandle = requestAnimationFrame(animationFrame);
 
         return () => cancelAnimationFrame(frameHandle);
-    }, []);
+    }, [gameWorld]);
 }
 
 interface CanvasProps {

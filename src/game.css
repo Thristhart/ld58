@@ -20,4 +20,13 @@ body {
 
 .CanvasContainer {
     width:calc(100% - 500px);
+    position: relative;
+}
+.CanvasContainer dialog {
+    inset: 0;
+    top: calc(50% + 32px);
+    margin-block: 0;
+}
+.CanvasContainer dialog h2 {
+    margin-top: 0;
 }

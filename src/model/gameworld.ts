@@ -1,14 +1,17 @@
+import cloneDeep from "lodash.clonedeep";
 import { Player } from "./entities/player";
 import { TileEntity } from "./entities/tile";
 import { Entity, Position } from "./entity";
 import { defaultGameState, GameState } from "./gamestate";
 
+let iteration = 0;
 type PositionString = `${number},${number}`;
 export class GameWorld {
     private entities: Map<PositionString, Set<Entity>>;
     public player!: Player;
-    private gameState: GameState = defaultGameState;
+    private gameState: GameState = cloneDeep(defaultGameState);
     private stateChangeSubscriptions = new Map<string, Set<() => void>>();
+    public iteration = iteration++;
 
     constructor() {
         this.entities = new Map<PositionString, Set<Entity>>();

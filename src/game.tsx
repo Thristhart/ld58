@@ -1,4 +1,4 @@
-import { useCallback, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Canvas } from "./canvas";
 import "./game.css";
 import { GameWorld } from "./model/gameworld";
@@ -55,13 +55,11 @@ function createGameWorld() {
     // @ts-ignore
     window.DEBUG_gameWorld = gameWorld;
 
-    requestAnimationFrame((timestamp) => tick(gameWorld, timestamp));
-
     return gameWorld;
 }
 
 function useGameWorld() {
-    const [gameWorld] = useState(createGameWorld);
+    const [gameWorld, setGameWorld] = useState(createGameWorld);
 
     const getGameState = useCallback(
         <K extends keyof GameState>(key: K) => {
@@ -83,15 +81,48 @@ function useGameWorld() {
         [gameWorld]
     );
 
-    return { gameWorld, getGameState, setGameState };
+    const restart = () => {
+        setGameWorld(createGameWorld);
+    };
+
+    useEffect(() => {
+        let frameHandle: number;
+        function animationFrame(timestamp: number) {
+            frameHandle = requestAnimationFrame(animationFrame);
+
+            tick(gameWorld, timestamp);
+        }
+
+        frameHandle = requestAnimationFrame(animationFrame);
+
+        return () => cancelAnimationFrame(frameHandle);
+    }, [gameWorld]);
+
+    return { gameWorld, getGameState, setGameState, restart };
+}
+
+interface DeathDialogProps {
+    restart: () => void;
+}
+function DeathDialog(props: DeathDialogProps) {
+    return (
+        <dialog open>
+            <section>
+                <h2>Game Over</h2>
+                <p>Try again?</p>
+                <button onClick={props.restart}>Retry</button>
+            </section>
+        </dialog>
+    );
 }
 
 export function Game() {
-    const { gameWorld, getGameState, setGameState } = useGameWorld();
+    const { gameWorld, getGameState, setGameState, restart } = useGameWorld();
     return (
         <div className="Container">
             <Interface getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
+                {getGameState("dead") && <DeathDialog restart={restart} />}
                 <Canvas gameWorld={gameWorld} />
             </div>
         </div>
