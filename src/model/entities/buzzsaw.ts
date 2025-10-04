@@ -35,6 +35,11 @@ export class Buzzsaw extends Enemy {
         }
     }
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
-        drawRotatedImage(context, buzzsawImage, this.position, (Math.PI * this.timeSinceMove) / this.timePerMove);
+        drawRotatedImage(
+            context,
+            buzzsawImage.bitmap,
+            this.position,
+            (Math.PI * this.timeSinceMove) / this.timePerMove
+        );
     }
 }

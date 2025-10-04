@@ -89,11 +89,11 @@ export class Segment extends Entity {
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         if (this.segmentType === SegmentType.Head) {
-            drawRotatedImage(context, headImage, this.position, (Math.PI / 2) * this.facing);
+            drawRotatedImage(context, headImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         } else if (this.segmentType === SegmentType.Straight) {
-            drawRotatedImage(context, segmentStraightImage, this.position, (Math.PI / 2) * this.facing);
+            drawRotatedImage(context, segmentStraightImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         } else if (this.segmentType === SegmentType.LeftCurve) {
-            drawRotatedImage(context, segmentCurveImage, this.position, (Math.PI / 2) * (this.facing - 1));
+            drawRotatedImage(context, segmentCurveImage.bitmap, this.position, (Math.PI / 2) * (this.facing - 1));
         } else if (this.segmentType === SegmentType.RightCurve) {
             let direction = this.facing - 1;
             if (this.facing === Direction.East) {
@@ -102,9 +102,9 @@ export class Segment extends Entity {
             if (this.facing === Direction.West) {
                 direction -= 2;
             }
-            drawRotatedImage(context, segmentCurveImage, this.position, (Math.PI / 2) * direction, true);
+            drawRotatedImage(context, segmentCurveImage.bitmap, this.position, (Math.PI / 2) * direction, true);
         } else if (this.segmentType === SegmentType.Tail) {
-            drawRotatedImage(context, segmentTailImage, this.position, (Math.PI / 2) * this.facing);
+            drawRotatedImage(context, segmentTailImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         }
     }
 }

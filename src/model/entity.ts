@@ -6,6 +6,7 @@ export class Entity {
     position: Position;
     facing: Direction;
     gameWorld: GameWorld;
+    zIndex: number = 1;
 
     constructor(position: Position, gameWorld: GameWorld, facing: Direction = Direction.North) {
         this.position = position;

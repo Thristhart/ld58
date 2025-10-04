@@ -1,6 +1,7 @@
 import { camera } from "./camera";
 import { GRID_SQUARE_SIZE } from "./constants";
 import { GameWorld } from "./model/gameworld";
+import { loadImage } from "./images";
 
 const frameDurations: number[] = new Array();
 const frameDurationsSampleCount = 20;
@@ -28,36 +29,19 @@ export function drawFrame(
     );
     context.scale(camera.scale, camera.scale);
 
-    // temporary grid lines
-
-    context.strokeStyle = "black";
-
-    for (let x = -100; x < 100; x++) {
-        context.beginPath();
-        context.moveTo(x * GRID_SQUARE_SIZE, -1000);
-        context.lineTo(x * GRID_SQUARE_SIZE, 1000);
-        context.closePath();
-        context.stroke();
-    }
-    for (let y = -100; y < 100; y++) {
-        context.beginPath();
-        context.moveTo(-1000, y * GRID_SQUARE_SIZE);
-        context.lineTo(1000, y * GRID_SQUARE_SIZE);
-        context.closePath();
-        context.stroke();
-    }
-
     const cameraX = Math.floor(camera.x / GRID_SQUARE_SIZE);
     const cameraY = Math.floor(camera.y / GRID_SQUARE_SIZE);
     const halfWisibleWidth = Math.ceil(canvas.width / camera.scale / GRID_SQUARE_SIZE / 2);
     const halfVisibleHeight = Math.ceil(canvas.height / camera.scale / GRID_SQUARE_SIZE / 2);
 
-    const visibleEntities = gameWorld.getEntitiesInArea({
+    const visibleBounds = {
         x: cameraX - halfWisibleWidth,
         y: cameraY - halfVisibleHeight,
         w: halfWisibleWidth * 2,
         h: halfVisibleHeight * 2,
-    });
+    };
+
+    const visibleEntities = gameWorld.getEntitiesInArea(visibleBounds).sort((a, b) => a.zIndex - b.zIndex);
 
     for (const ent of visibleEntities) {
         ent.draw(context, canvas);

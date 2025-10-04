@@ -18,7 +18,7 @@ export class Pickup extends Entity {
     }
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         context.drawImage(
-            pickupImage,
+            pickupImage.bitmap,
             this.position.x * GRID_SQUARE_SIZE,
             this.position.y * GRID_SQUARE_SIZE,
             GRID_SQUARE_SIZE,

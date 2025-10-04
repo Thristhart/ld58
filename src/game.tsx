@@ -11,6 +11,7 @@ import { Interface } from "./Interface/Interface";
 import { Position } from "./model/entity";
 import { Wall } from "./model/entities/wall";
 import { Buzzsaw } from "./model/entities/buzzsaw";
+import { GrassTile } from "./model/entities/grasstile";
 
 function createRoom(gameWorld: GameWorld, centerX: number, centerY: number, size: number) {
     let candidates: Position[] = [];
@@ -46,6 +47,10 @@ function createGameWorld() {
     gameWorld.player.addSegment();
     gameWorld.player.addSegment();
     gameWorld.player.tryMove(Direction.North);
+
+    const initialGrassTile = new GrassTile({ x: 0, y: 0 }, gameWorld, 0);
+    gameWorld.addEntity(initialGrassTile);
+    initialGrassTile.spread();
 
     gameWorld.addEntity(new Buzzsaw({ x: 5, y: 5 }, gameWorld));
 
