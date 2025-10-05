@@ -8,7 +8,7 @@ import { Wall } from "./wall";
 import { GameWorld } from "../gameworld";
 import { Direction } from "../../direction";
 import { RoomInstance } from "../room";
-import { levels } from "#src/levels/loadlevel.ts";
+import { getRoomToGenerateForDoor, levels } from "#src/levels/loadlevel.ts";
 
 const openDoorImage = loadImage(openDoorImageUrl);
 const closedDoorImage = loadImage(closedDoorImageUrl);
@@ -32,7 +32,7 @@ export class ClosedDoor extends Wall {
     ) {
         super(position, gameWorld, facing);
         this.myRoom = myRoom;
-        this.openRequirements = openRequirements;
+        this.openRequirements = 0; //openRequirements;
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
@@ -42,7 +42,7 @@ export class ClosedDoor extends Wall {
 
     think(dt: number) {
         if (this.gameWorld.player.otherSegments.length + 1 > this.openRequirements && !this.createdNextRoom) {
-            const newRoom = levels.basic;
+            const newRoom = getRoomToGenerateForDoor(this);
             let newRoomPosition: Position;
             switch (this.facing) {
                 case Direction.North:
