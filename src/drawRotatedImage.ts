@@ -17,6 +17,6 @@ export function drawRotatedImage(
         context.scale(-1, 1);
     }
     context.rotate(angle);
-    context.drawImage(image, -GRID_SQUARE_SIZE / 2, -GRID_SQUARE_SIZE / 2, GRID_SQUARE_SIZE, GRID_SQUARE_SIZE);
+    context.drawImage(image, -GRID_SQUARE_SIZE / 2, -GRID_SQUARE_SIZE / 2, GRID_SQUARE_SIZE + 1, GRID_SQUARE_SIZE + 1);
     context.restore();
 }
