@@ -1,6 +1,8 @@
 import { loadImage } from "#src/images.ts";
 import { Position } from "#src/model/entity.ts";
 import { RoomDefinition, TileType } from "#src/model/room.ts";
+import { ClosedDoor } from "#src/model/entities/door.ts";
+import { Direction } from "#src/direction.ts";
 
 /*
 TODO:
@@ -16,8 +18,6 @@ import canyon_1 from "./canyon_1.png";
 import cubbies from "./cubbies.png";
 import equalsmore from "./equalsmore.png";
 import zoo from "./zoo.png";
-import { ClosedDoor } from "#src/model/entities/door.ts";
-import { addPositions, Direction } from "#src/direction.ts";
 
 export const levelLoadPromise = Promise.all([
     loadLevel("basic", loadImage(basic)),
@@ -29,24 +29,7 @@ export const levelLoadPromise = Promise.all([
     loadLevel("cubbies", loadImage(cubbies)),
     loadLevel("equalsmore", loadImage(equalsmore)),
     loadLevel("zoo", loadImage(zoo)),
-]).then(() => {
-    Object.entries(levels).forEach(([name, level]) => {
-        console.log("name:", name);
-        const rows: number[][] = [];
-        level.locations.forEach((type, location) => {
-            rows[location.x] ??= [];
-            rows[location.x][location.y] = type;
-        });
-        let text = "";
-        for (let x = 0; x < level.width; x++) {
-            text += "\n";
-            for (let y = 0; y < level.height; y++) {
-                text += rows[x][y] ?? " ";
-            }
-        }
-        console.log(text);
-    });
-});
+]);
 export const levels: Record<string, RoomDefinition> = {};
 
 function getTileTypeForColor(color: number) {
