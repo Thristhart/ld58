@@ -37,7 +37,11 @@ export class ClosedDoor extends Wall {
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         drawRotatedImage(context, closedDoorImage.bitmap, this.position, (Math.PI / 2) * this.facing);
-        drawDoorText(context, this.position, this.openRequirements.toString());
+        drawDoorText(
+            context,
+            this.position,
+            (this.openRequirements - this.gameWorld.player.otherSegments.length).toString()
+        );
     }
 
     think(dt: number) {
