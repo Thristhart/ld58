@@ -88,15 +88,21 @@ export async function loadLevel(name: string, image: ReturnType<typeof loadImage
         let [r, g, b, _a] = imageData.data.slice(i);
         const x = (i / 4) % imageData.width;
         const y = Math.floor(i / 4 / imageData.width);
-        // jesus christ, firefox
-        if (r === 1) {
+        // jesus christ, firefox!
+        if (r < 128) {
             r = 0;
+        } else {
+            r = 255;
         }
-        if (g === 1) {
+        if (g < 128) {
             g = 0;
+        } else {
+            g = 255;
         }
-        if (b === 1) {
+        if (b < 128) {
             b = 0;
+        } else {
+            b = 255;
         }
         const hex = (r << 16) + (g << 8) + b;
         const tile = getTileTypeForColor(hex);
