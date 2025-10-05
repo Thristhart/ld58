@@ -29,7 +29,7 @@ export function drawDoorText(context: CanvasRenderingContext2D, position: Positi
     );
     context.rotate(angle);
     context.fillStyle = "white";
-    context.font = "bold 36px serif";
+    context.font = "bold 36px Germania One";
     const textWidth = context.measureText(text).width;
     context.fillText(text, -(textWidth / 2), GRID_SQUARE_SIZE / 2 - DOOR_PADDING);
     context.restore();
