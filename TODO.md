@@ -4,7 +4,7 @@ Ship blockers:
 [x] Pause some amount when entering a room (maybe: pause sim while transitioning?)
 [x] Food should only spawn on food spawn locations
 [x] Food should only spawn up to door requirement count
-[ ] Door requirements should scale with number of rooms
+[x] Door requirements should scale with number of rooms
 [x] Enemies should not spawn based on random poll, but instead spawn a specific number on random (enemyspawn) squares
 [ ] Intro should have instructions/tutorial
 [ ] Game over screen
@@ -12,6 +12,7 @@ Ship blockers:
 [ ] Gain flesh over time?
 [x] Door num visuals
 [ ] Use Tan's images
+[ ] Fix inaccessible doors
 
 Nice to have:
 
