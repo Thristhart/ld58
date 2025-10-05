@@ -72,7 +72,7 @@ export class GameWorld {
                 if (location.y === room.definition.height - 1) {
                     facing = Direction.South;
                 }
-                const door = new ClosedDoor(pos, this, facing);
+                const door = new ClosedDoor(pos, this, 8, facing);
                 this.addEntity(door);
             }
         });
