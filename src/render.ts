@@ -26,8 +26,11 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
     frameTimeIndex %= frameDurationsSampleCount;
     const averageFrameTime = frameDurations.reduce((prev, current) => prev + current) / frameDurations.length;
 
-    if (timeSinceCameraPositionChange > 0) {
-        timeSinceCameraPositionChange -= dt;
+    if (gameWorld.getGameState("timeSinceCameraPositionChange") > 0) {
+        gameWorld.setGameState(
+            "timeSinceCameraPositionChange",
+            gameWorld.getGameState("timeSinceCameraPositionChange") - dt
+        );
     }
 
     const currentRoom = gameWorld.getRoomContainingPosition(gameWorld.player.position);
@@ -36,7 +39,7 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
         const targetHeightScale = canvas.height / (currentRoom.definition.height * GRID_SQUARE_SIZE);
         const smallestScale = Math.min(targetWidthScale, targetHeightScale);
         if (camera.scale != smallestScale) {
-            timeSinceCameraPositionChange = cameraTransitionDuration;
+            gameWorld.setGameState("timeSinceCameraPositionChange", cameraTransitionDuration);
             oldCameraScale = camera.scale;
             camera.scale = smallestScale;
         } else {
@@ -48,7 +51,7 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
         const newCameraY = center.y * GRID_SQUARE_SIZE;
         if (camera.x !== newCameraX || camera.y !== newCameraY) {
             oldCameraPosition = { x: camera.x, y: camera.y };
-            timeSinceCameraPositionChange = cameraTransitionDuration;
+            gameWorld.setGameState("timeSinceCameraPositionChange", cameraTransitionDuration);
             camera.x = newCameraX;
             camera.y = newCameraY;
         }
@@ -58,8 +61,8 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
     let cameraX = camera.x;
     let cameraY = camera.y;
 
-    if (timeSinceCameraPositionChange > 0) {
-        const t = 1 - timeSinceCameraPositionChange / cameraTransitionDuration;
+    if (gameWorld.getGameState("timeSinceCameraPositionChange") > 0) {
+        const t = 1 - gameWorld.getGameState("timeSinceCameraPositionChange") / cameraTransitionDuration;
         cameraScale = lerp(t, oldCameraScale, camera.scale);
         cameraX = lerp(t, oldCameraPosition.x, camera.x);
         cameraY = lerp(t, oldCameraPosition.y, camera.y);

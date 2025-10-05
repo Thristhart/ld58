@@ -1,6 +1,5 @@
 Ship blockers:
 
--   Pause some amount when entering a room (maybe: pause sim while transitioning?)
 -   Food should only spawn on food spawn locations
 -   Food should only spawn up to door requirement count
 -   Door requirements should scale with number of rooms

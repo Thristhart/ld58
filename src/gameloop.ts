@@ -7,7 +7,7 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
     const dt = timestamp - lastFrameTime;
     lastFrameTime = timestamp;
 
-    if (!gameWorld.getGameState("isPaused")) {
+    if (!gameWorld.getGameState("isPaused") && gameWorld.getGameState("timeSinceCameraPositionChange") <= 0) {
         advanceGame(gameWorld, dt * gameWorld.getGameState("gameSpeed"));
     }
 }
