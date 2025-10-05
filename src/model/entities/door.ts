@@ -32,7 +32,7 @@ export class ClosedDoor extends Wall {
     ) {
         super(position, gameWorld, facing);
         this.myRoom = myRoom;
-        this.openRequirements = 0; //openRequirements;
+        this.openRequirements = openRequirements;
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
