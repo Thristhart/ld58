@@ -12,12 +12,16 @@ let oldCameraScale = 1;
 let oldCameraPosition = { x: 0, y: 0 };
 let cameraTransitionDuration = 200;
 
-export function drawFrame(
+export function tickFrame(
     dt: number,
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D,
     gameWorld: GameWorld
 ) {
+    drawFrame(dt * gameWorld.getGameState("gameSpeed"), canvas, context, gameWorld);
+}
+
+function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, gameWorld: GameWorld) {
     frameDurations[frameTimeIndex++] = dt;
     frameTimeIndex %= frameDurationsSampleCount;
     const averageFrameTime = frameDurations.reduce((prev, current) => prev + current) / frameDurations.length;
@@ -35,6 +39,8 @@ export function drawFrame(
             timeSinceCameraPositionChange = cameraTransitionDuration;
             oldCameraScale = camera.scale;
             camera.scale = smallestScale;
+        } else {
+            oldCameraScale = camera.scale;
         }
 
         const center = currentRoom.centerPoint();

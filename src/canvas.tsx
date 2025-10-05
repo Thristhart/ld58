@@ -1,6 +1,6 @@
 import { use, useEffect, useRef } from "react";
 import "./canvas.css";
-import { drawFrame } from "./render";
+import { tickFrame } from "./render";
 import { GameWorld } from "./model/gameworld";
 import { imageLoadPromise } from "./images";
 import { levelLoadPromise } from "./levels/loadlevel";
@@ -48,7 +48,7 @@ function useDrawLoop(canvasRef: React.RefObject<HTMLCanvasElement | null>, gameW
             const dt = timestamp - lastTimestamp;
             lastTimestamp = timestamp;
 
-            drawFrame(dt, canvas, context!, gameWorld);
+            tickFrame(dt, canvas, context!, gameWorld);
         }
 
         frameHandle = requestAnimationFrame(animationFrame);

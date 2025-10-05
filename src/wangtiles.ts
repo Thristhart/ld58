@@ -62,5 +62,8 @@ export function getValidWangTile(neighbors: { wangIndex: number; direction: Dire
         validTiles = union(validTiles, wang[neighbor.wangIndex][neighbor.direction]);
     }
     const options = [...validTiles];
+    if (options.length === 0) {
+        return 0;
+    }
     return options[Math.floor(Math.random() * options.length)];
 }

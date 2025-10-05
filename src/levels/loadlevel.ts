@@ -29,9 +29,19 @@ export async function loadLevel(name: string, image: ReturnType<typeof loadImage
     const imageData = context.getImageData(0, 0, image.bitmap.width, image.bitmap.height);
     const locations = new Map<Position, TileType>();
     for (let i = 0; i < imageData.data.length; i += 4) {
-        const [r, g, b, _a] = imageData.data.slice(i);
+        let [r, g, b, _a] = imageData.data.slice(i);
         const x = (i / 4) % imageData.width;
         const y = Math.floor(i / 4 / imageData.width);
+        // jesus christ, firefox
+        if (r === 1) {
+            r = 0;
+        }
+        if (g === 1) {
+            g = 0;
+        }
+        if (b === 1) {
+            b = 0;
+        }
         const hex = (r << 16) + (g << 8) + b;
         const tile = getTileTypeForColor(hex);
         if (tile !== undefined) {
