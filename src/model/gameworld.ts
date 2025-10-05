@@ -47,7 +47,7 @@ export class GameWorld {
     }
 
     public createRoom(roomDefinition: RoomDefinition, position: Position) {
-        const room = new RoomInstance(position, roomDefinition);
+        const room = new RoomInstance(position, roomDefinition, this.rooms.size);
         this.rooms.add(room);
         room.definition.locations.forEach((tileType, location) => {
             const pos = addPositions(position, location);
