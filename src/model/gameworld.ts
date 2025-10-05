@@ -83,7 +83,6 @@ export class GameWorld {
             }
         });
         let foodSpawnTiles = [...room.definition.locations].filter(([k, v]) => v === TileType.FoodSpawn);
-        console.log(foodSpawnTiles);
         while (numFoodToSpawn > 0 && foodSpawnTiles.length > 0) {
             let newFoodPosition = foodSpawnTiles[Math.floor(Math.random() * foodSpawnTiles.length)];
 
@@ -232,7 +231,6 @@ export class GameWorld {
     getRandomEmptyFoodSpawnPositionNearPlayer() {
         const currentRoom = this.getRoomContainingPosition(this.player.position)!;
         let foodSpawnTiles = [...currentRoom.definition.locations].filter(([k, v]) => v === TileType.FoodSpawn);
-        console.log(foodSpawnTiles);
 
         let newFoodPosition = foodSpawnTiles[Math.floor(Math.random() * foodSpawnTiles.length)];
 
