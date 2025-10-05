@@ -9,6 +9,7 @@ import { addPositions, Direction, getPositionInDirection, getRandomDirection } f
 import { ClosedDoor } from "./entities/door";
 import { WingedEnemy } from "./entities/wingedenemy";
 import { Pickup } from "./entities/pickup";
+import { Enemy } from "./entities/enemy";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
@@ -49,6 +50,7 @@ export class GameWorld {
     public createRoom(roomDefinition: RoomDefinition, position: Position) {
         const room = new RoomInstance(position, roomDefinition, this.rooms.size);
         let numFoodToSpawn = this.getFoodCountToSpawn(this.gameState.roomsVisited.size);
+        let numEnemiesToSpawn = this.getEnemyCountToSpawn(this.gameState.roomsVisited.size);
         this.rooms.add(room);
         room.definition.locations.forEach((tileType, location) => {
             const pos = addPositions(position, location);
@@ -90,6 +92,15 @@ export class GameWorld {
             const food = new Pickup(addPositions(position, newFoodPosition[0]), this, Direction.North);
             this.addEntity(food);
             numFoodToSpawn--;
+        }
+        let enemySpawnTiles = [...room.definition.locations].filter(([k, v]) => v === TileType.EnemySpawn);
+        while (numEnemiesToSpawn > 0 && enemySpawnTiles.length > 0) {
+            let newEnemyPosition = enemySpawnTiles[Math.floor(Math.random() * enemySpawnTiles.length)];
+
+            enemySpawnTiles.splice(enemySpawnTiles.indexOf(newEnemyPosition), 1);
+            const enemy = new WingedEnemy(addPositions(position, newEnemyPosition[0]), this, Direction.North);
+            this.addEntity(enemy);
+            numEnemiesToSpawn--;
         }
         return room;
     }
@@ -232,11 +243,8 @@ export class GameWorld {
         const currentRoom = this.getRoomContainingPosition(this.player.position)!;
         let foodSpawnTiles = [...currentRoom.definition.locations].filter(([k, v]) => v === TileType.FoodSpawn);
 
-        let newFoodPosition = foodSpawnTiles[Math.floor(Math.random() * foodSpawnTiles.length)];
+        foodSpawnTiles[Math.floor(Math.random() * foodSpawnTiles.length)];
 
-        foodSpawnTiles.splice(foodSpawnTiles.indexOf(newFoodPosition), 1);
-        const food = new Pickup(addPositions(currentRoom.position, newFoodPosition[0]), this, Direction.North);
-        this.addEntity(food);
         // uh, couldn't find a spot? just slap it on the player, screw it
         return { ...this.player.position };
     }
@@ -258,6 +266,17 @@ export class GameWorld {
             return 11;
         }
         return 15;
+    }
+
+    private getEnemyCountToSpawn(numRoomsVisited: number) {
+        if (numRoomsVisited < 3) {
+            return 1;
+        } else if (numRoomsVisited < 8) {
+            return 3;
+        } else if (numRoomsVisited < 13) {
+            return 5;
+        }
+        return 7;
     }
 
     static isPointWithinBox(point: Position, box: { x: number; y: number; w: number; h: number }) {
