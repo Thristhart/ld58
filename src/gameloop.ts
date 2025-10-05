@@ -1,19 +1,15 @@
-import { Direction, getRandomDirection } from "./direction";
-import { getRandomPositionNear } from "./distance";
-import { InputState, Input } from "./input";
-import { Upgrade, UpgradeType } from "./model/entities/upgrade";
-import { WingedEnemy } from "./model/entities/wingedenemy";
+import { Direction } from "./direction";
+import { Input, InputState } from "./input";
 import { GameWorld } from "./model/gameworld";
 
 let lastFrameTime = performance.now();
 export function tick(gameWorld: GameWorld, timestamp: number) {
     const dt = timestamp - lastFrameTime;
+    lastFrameTime = timestamp;
 
     if (!gameWorld.getGameState("isPaused")) {
         advanceGame(gameWorld, dt * gameWorld.getGameState("gameSpeed"));
     }
-
-    lastFrameTime = timestamp;
 }
 
 let enemyAddTimer = 0;

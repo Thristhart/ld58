@@ -7,6 +7,8 @@ import { TileEntity } from "./tile";
 import { Wall } from "./wall";
 import { GameWorld } from "../gameworld";
 import { Direction } from "../../direction";
+import { RoomInstance } from "../room";
+import { levels } from "#src/levels/loadlevel.ts";
 
 const openDoorImage = loadImage(openDoorImageUrl);
 const closedDoorImage = loadImage(closedDoorImageUrl);
@@ -18,14 +20,17 @@ export class OpenDoor extends TileEntity {
 }
 export class ClosedDoor extends Wall {
     openRequirements: number;
+    myRoom: RoomInstance;
 
     constructor(
         position: Position,
         gameWorld: GameWorld,
         openRequirements: number,
+        myRoom: RoomInstance,
         facing: Direction = Direction.North
     ) {
         super(position, gameWorld, facing);
+        this.myRoom = myRoom;
         this.openRequirements = openRequirements;
     }
 
@@ -36,6 +41,30 @@ export class ClosedDoor extends Wall {
 
     think(dt: number) {
         if (this.gameWorld.player.otherSegments.length + 1 > this.openRequirements) {
+            const newRoom = levels.basic;
+            let newRoomPosition: Position;
+            switch (this.facing) {
+                case Direction.North:
+                    newRoomPosition = { x: this.myRoom.position.x, y: this.myRoom.position.y - newRoom.height + 1 };
+                    break;
+                case Direction.East:
+                    newRoomPosition = {
+                        x: this.myRoom.position.x + this.myRoom.definition.width - 1,
+                        y: this.myRoom.position.y,
+                    };
+                    break;
+                case Direction.South:
+                    newRoomPosition = {
+                        x: this.myRoom.position.x,
+                        y: this.myRoom.position.y + this.myRoom.definition.height - 1,
+                    };
+                    break;
+                case Direction.West:
+                    newRoomPosition = { x: this.myRoom.position.x - newRoom.width + 1, y: this.myRoom.position.y };
+                    break;
+            }
+            this.gameWorld.createRoom(newRoom, newRoomPosition);
+
             this.gameWorld.addEntity(this.makeOpen());
             this.gameWorld.removeEntity(this);
         }

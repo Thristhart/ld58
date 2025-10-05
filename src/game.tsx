@@ -1,21 +1,16 @@
+import { Direction } from "#src/direction.ts";
 import { Suspense, use, useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Canvas } from "./canvas";
 import "./game.css";
-import { GameWorld } from "./model/gameworld";
+import { bufferedMoves, tick } from "./gameloop";
+import { imageLoadPromise } from "./images";
+import { Interface } from "./Interface/Interface";
+import { levelLoadPromise, levels } from "./levels/loadlevel";
+import { GrassTile } from "./model/entities/grasstile";
 import { Pickup } from "./model/entities/pickup";
 import { Player } from "./model/entities/player";
-import { Direction } from "#src/direction.ts";
-import { bufferedMoves, tick } from "./gameloop";
 import { GameState } from "./model/gamestate";
-import { Interface } from "./Interface/Interface";
-import { Position } from "./model/entity";
-import { Wall } from "./model/entities/wall";
-import { Buzzsaw } from "./model/entities/buzzsaw";
-import { GrassTile } from "./model/entities/grasstile";
-import { BatCountry } from "./model/rooms/batcountry";
-import { ClosedDoor, OpenDoor } from "./model/entities/door";
-import { imageLoadPromise } from "./images";
-import { levelLoadPromise, levels } from "./levels/loadlevel";
+import { GameWorld } from "./model/gameworld";
 
 function createGameWorld() {
     const gameWorld = new GameWorld();

@@ -47,9 +47,12 @@ export class GameWorld {
     public createRoom(roomDefinition: RoomDefinition, position: Position) {
         const room = new RoomInstance(position, roomDefinition);
         this.rooms.add(room);
-        console.log(room.definition.locations);
         room.definition.locations.forEach((tileType, location) => {
             const pos = addPositions(position, location);
+            // No matter what, don't splat stuff on existing tiles
+            if (!this.isPositionEmpty(pos)) {
+                return;
+            }
             if (tileType === TileType.Wall) {
                 let facing = Direction.North;
                 if (location.x === 0) {
@@ -72,7 +75,7 @@ export class GameWorld {
                 if (location.y === room.definition.height - 1) {
                     facing = Direction.South;
                 }
-                const door = new ClosedDoor(pos, this, 8, facing);
+                const door = new ClosedDoor(pos, this, 8, room, facing);
                 this.addEntity(door);
             }
         });

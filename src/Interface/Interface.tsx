@@ -40,7 +40,7 @@ export function GameSpeed(props: {
             <input
                 type="range"
                 min={0.01}
-                max={2}
+                max={4}
                 value={gameSpeed}
                 step={0.01}
                 onChange={(e) => setGameState("gameSpeed", e.target.valueAsNumber)}
