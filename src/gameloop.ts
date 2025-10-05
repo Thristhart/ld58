@@ -70,9 +70,12 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
     //     upgradeAddTimer = 0;
     // }
 
-    const entitiesToSimulate = gameWorld.getEntitiesNear(gameWorld.player.position, simulationWindow);
-    for (const entity of entitiesToSimulate) {
-        entity.think(dt);
+    const currentRoom = gameWorld.getRoomContainingPosition(gameWorld.player.position);
+    if (currentRoom !== undefined) {
+        const entitiesToSimulate = gameWorld.getEntitiesInRoom(currentRoom);
+        for (const entity of entitiesToSimulate) {
+            entity.think(dt);
+        }
     }
 }
 

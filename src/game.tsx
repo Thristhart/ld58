@@ -48,7 +48,7 @@ function createGameWorld() {
             gameWorld.removeEntity(ent);
         }
     }
-    const door = new OpenDoor(doorPos, gameWorld);
+    const door = new ClosedDoor(doorPos, gameWorld, 8);
     gameWorld.addEntity(door);
 
     // @ts-ignore
