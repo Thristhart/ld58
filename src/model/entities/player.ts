@@ -143,12 +143,6 @@ export class Player extends Segment {
     }
     tryMove(direction: Direction) {
         const nextPosition = getPositionInDirection(this.position, direction);
-        const currentRoom = this.gameWorld.getRoomContainingPosition(this.position);
-        const nextRoom = this.gameWorld.getRoomContainingPosition(nextPosition);
-        if (currentRoom?.id !== nextRoom?.id && nextRoom?.id !== undefined) {
-            this.gameWorld.setGameState("roomsVisited", this.gameWorld.getGameState("roomsVisited").add(nextRoom.id));
-            this.gameWorld.setGameState("currentRoom", nextRoom);
-        }
 
         const entitiesAtPos = this.gameWorld.getEntitiesAt(nextPosition);
         for (const entity of entitiesAtPos) {
@@ -175,6 +169,13 @@ export class Player extends Segment {
         this.gameWorld.setGameState("dying", false);
         let lastPosition = nextPosition;
         let nextType = SegmentType.Head;
+
+        const currentRoom = this.gameWorld.getRoomContainingPosition(this.position);
+        const nextRoom = this.gameWorld.getRoomContainingPosition(nextPosition);
+        if (currentRoom?.id !== nextRoom?.id && nextRoom?.id !== undefined) {
+            this.gameWorld.setGameState("roomsVisited", this.gameWorld.getGameState("roomsVisited").add(nextRoom.id));
+            this.gameWorld.setGameState("currentRoom", nextRoom);
+        }
 
         const segments = [this, ...this.otherSegments];
         for (const segment of segments) {
