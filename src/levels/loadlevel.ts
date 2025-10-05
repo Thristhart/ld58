@@ -30,7 +30,6 @@ export const levelLoadPromise = Promise.all([
     loadLevel("equalsmore", loadImage(equalsmore)),
     loadLevel("zoo", loadImage(zoo)),
 ]);
-
 export const levels: Record<string, RoomDefinition> = {};
 
 function getTileTypeForColor(color: number) {
@@ -51,13 +50,12 @@ function getTileTypeForColor(color: number) {
 export function rotateRoomDefinition(roomDef: RoomDefinition): RoomDefinition {
     const rotatedLocations = new Map<Position, TileType>();
     for (const [location, tileType] of roomDef.locations) {
-        rotatedLocations.set(
-            {
-                x: -(location.y - Math.floor(roomDef.height / 2)) + Math.floor(roomDef.width / 2),
-                y: location.x - Math.floor(roomDef.width / 2) + Math.floor(roomDef.height / 2),
-            },
-            tileType
-        );
+        const newLocation = {
+            x: -(location.y - Math.floor(roomDef.height / 2)) + Math.floor(roomDef.width / 2),
+            y: location.x - Math.floor(roomDef.width / 2) + Math.floor(roomDef.height / 2),
+        };
+        console.log(location, "becomes", newLocation);
+        rotatedLocations.set(newLocation, tileType);
     }
     return { ...roomDef, locations: rotatedLocations };
 }
@@ -99,7 +97,7 @@ export async function loadLevel(name: string, image: ReturnType<typeof loadImage
     };
 
     levels[name] = roomDef;
-    levels[`${name}_rotate`] = roomDef;
+    levels[`${name}_rotate`] = { ...rotateRoomDefinition(roomDef), name: `${name}_rotate` };
 
     return roomDef;
 }

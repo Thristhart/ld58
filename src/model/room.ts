@@ -32,9 +32,9 @@ export class RoomInstance {
     containsPoint(point: Position) {
         return (
             point.x >= this.position.x &&
-            point.x <= this.position.x + this.definition.width &&
+            point.x < this.position.x + this.definition.width &&
             point.y >= this.position.y &&
-            point.y <= this.position.y + this.definition.height
+            point.y < this.position.y + this.definition.height
         );
     }
 
