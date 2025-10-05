@@ -41,8 +41,8 @@ export class GrassTile extends TileEntity {
             32,
             this.position.x * GRID_SQUARE_SIZE,
             this.position.y * GRID_SQUARE_SIZE,
-            GRID_SQUARE_SIZE,
-            GRID_SQUARE_SIZE
+            GRID_SQUARE_SIZE + 1,
+            GRID_SQUARE_SIZE + 1
         );
     }
 
