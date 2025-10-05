@@ -2,13 +2,33 @@ import { loadImage } from "#src/images.ts";
 import { Position } from "#src/model/entity.ts";
 import { RoomDefinition, TileType } from "#src/model/room.ts";
 
+/*
+TODO:
+zoo.png
+*/
+
 import basic from "./basic.png";
 import plus from "./plus.png";
 import basketball from "./basketball.png";
+import c_shape from "./c_shape.png";
+import LL from "./LL.png";
+import canyon_1 from "./canyon_1.png";
+import cubbies from "./cubbies.png";
+import equalsmore from "./equalsmore.png";
+import zoo from "./zoo.png";
+
 export const levelLoadPromise = Promise.all([
     loadLevel("basic", loadImage(basic)),
     loadLevel("plus", loadImage(plus)),
     loadLevel("basketball", loadImage(basketball)),
+    loadLevel("c_shape", loadImage(c_shape)),
+    loadLevel("LL", loadImage(LL)),
+    loadLevel("canyon_1", loadImage(canyon_1)),
+    loadLevel("cubbies", loadImage(cubbies)),
+    loadLevel("equalsmore", loadImage(equalsmore)),
+    loadLevel("zoo", loadImage(zoo)),
+
+
 ]);
 
 export const levels: Record<string, RoomDefinition> = {};
