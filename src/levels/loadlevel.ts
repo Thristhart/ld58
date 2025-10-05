@@ -48,11 +48,18 @@ function getTileTypeForColor(color: number) {
     }
 }
 
-export function rotateRoomDefinition(roomDef: RoomDefinition) {
+export function rotateRoomDefinition(roomDef: RoomDefinition): RoomDefinition {
     const rotatedLocations = new Map<Position, TileType>();
     for (const [location, tileType] of roomDef.locations) {
-        rotatedLocations.set({ x: location.y, y: location.x }, tileType);
+        rotatedLocations.set(
+            {
+                x: -(location.y - Math.floor(roomDef.height / 2)) + Math.floor(roomDef.width / 2),
+                y: location.x - Math.floor(roomDef.width / 2) + Math.floor(roomDef.height / 2),
+            },
+            tileType
+        );
     }
+    return { ...roomDef, locations: rotatedLocations };
 }
 
 export async function loadLevel(name: string, image: ReturnType<typeof loadImage>): Promise<RoomDefinition> {
@@ -91,6 +98,7 @@ export async function loadLevel(name: string, image: ReturnType<typeof loadImage
     };
 
     levels[name] = roomDef;
+    levels[`${name}_rotate`] = roomDef;
 
     return roomDef;
 }
