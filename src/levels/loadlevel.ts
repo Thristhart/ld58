@@ -1,7 +1,15 @@
 import { loadImage } from "#src/images.ts";
 import { Position } from "#src/model/entity.ts";
 import { RoomDefinition, TileType } from "#src/model/room.ts";
-import basicLevelUrl from "./basic.png";
+
+import basic from "./basic.png";
+import plus from "./plus.png";
+import basketball from "./basketball.png";
+export const levelLoadPromise = Promise.all([
+    loadLevel("basic", loadImage(basic)),
+    loadLevel("plus", loadImage(plus)),
+    loadLevel("basketball", loadImage(basketball)),
+]);
 
 export const levels: Record<string, RoomDefinition> = {};
 
@@ -17,6 +25,13 @@ function getTileTypeForColor(color: number) {
             return TileType.FoodSpawn;
         default:
             return undefined;
+    }
+}
+
+export function rotateRoomDefinition(roomDef: RoomDefinition) {
+    const rotatedLocations = new Map<Position, TileType>();
+    for (const [location, tileType] of roomDef.locations) {
+        rotatedLocations.set({ x: location.y, y: location.x }, tileType);
     }
 }
 
@@ -59,5 +74,3 @@ export async function loadLevel(name: string, image: ReturnType<typeof loadImage
 
     return roomDef;
 }
-
-export const levelLoadPromise = Promise.all([loadLevel("basic", loadImage(basicLevelUrl))]);
