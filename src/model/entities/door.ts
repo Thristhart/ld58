@@ -6,9 +6,9 @@ import { Position } from "../entity";
 import { TileEntity } from "./tile";
 import { Wall } from "./wall";
 import { GameWorld } from "../gameworld";
-import { Direction } from "../../direction";
+import { Direction, getPositionInDirection } from "../../direction";
 import { RoomInstance } from "../room";
-import { levels } from "#src/levels/loadlevel.ts";
+import { getRoomToGenerateForDoor, levels } from "#src/levels/loadlevel.ts";
 
 const openDoorImage = loadImage(openDoorImageUrl);
 const closedDoorImage = loadImage(closedDoorImageUrl);
@@ -46,29 +46,34 @@ export class ClosedDoor extends Wall {
 
     think(dt: number) {
         if (this.gameWorld.player.otherSegments.length + 1 > this.openRequirements && !this.createdNextRoom) {
-            const newRoom = levels.basic;
-            let newRoomPosition: Position;
-            switch (this.facing) {
-                case Direction.North:
-                    newRoomPosition = { x: this.myRoom.position.x, y: this.myRoom.position.y - newRoom.height + 1 };
-                    break;
-                case Direction.East:
-                    newRoomPosition = {
-                        x: this.myRoom.position.x + this.myRoom.definition.width - 1,
-                        y: this.myRoom.position.y,
-                    };
-                    break;
-                case Direction.South:
-                    newRoomPosition = {
-                        x: this.myRoom.position.x,
-                        y: this.myRoom.position.y + this.myRoom.definition.height - 1,
-                    };
-                    break;
-                case Direction.West:
-                    newRoomPosition = { x: this.myRoom.position.x - newRoom.width + 1, y: this.myRoom.position.y };
-                    break;
+            const pointInNewRoom = getPositionInDirection(this.position, this.facing);
+            if (!this.gameWorld.getRoomContainingPosition(pointInNewRoom)) {
+                const newRoom = getRoomToGenerateForDoor(this);
+                let newRoomPosition: Position;
+                switch (this.facing) {
+                    case Direction.North:
+                        newRoomPosition = { x: this.myRoom.position.x, y: this.myRoom.position.y - newRoom.height + 1 };
+                        break;
+                    case Direction.East:
+                        newRoomPosition = {
+                            x: this.myRoom.position.x + this.myRoom.definition.width - 1,
+                            y: this.myRoom.position.y,
+                        };
+                        break;
+                    case Direction.South:
+                        newRoomPosition = {
+                            x: this.myRoom.position.x,
+                            y: this.myRoom.position.y + this.myRoom.definition.height - 1,
+                        };
+                        break;
+                    case Direction.West:
+                        newRoomPosition = { x: this.myRoom.position.x - newRoom.width + 1, y: this.myRoom.position.y };
+                        break;
+                }
+                this.gameWorld.createRoom(newRoom, newRoomPosition);
+            } else {
+                console.log(this.gameWorld.getRoomContainingPosition(pointInNewRoom), pointInNewRoom);
             }
-            this.gameWorld.createRoom(newRoom, newRoomPosition);
             this.createdNextRoom = true;
 
             this.gameWorld.addEntity(this.makeOpen());

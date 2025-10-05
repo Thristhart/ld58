@@ -1,4 +1,4 @@
-import { LargeNumberLike } from "crypto";
+import { RoomInstance } from "./room";
 
 export interface GameState {
     points: number;
@@ -9,6 +9,8 @@ export interface GameState {
     roomsVisited: Set<number>;
 
     timePerAutomove: number;
+
+    currentRoom?: RoomInstance;
 
     // 1-100
     enemyChanceMultiplier: number;

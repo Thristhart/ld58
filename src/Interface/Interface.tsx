@@ -35,15 +35,18 @@ export function GameSpeed(props: {
     const gameSpeed = getGameState("gameSpeed");
     return (
         <div>
-            <span>DEBUG: game speed: {gameSpeed}</span>
-            <input
-                type="range"
-                min={0.01}
-                max={4}
-                value={gameSpeed}
-                step={0.01}
-                onChange={(e) => setGameState("gameSpeed", e.target.valueAsNumber)}
-            />
+            <div>
+                <span>DEBUG: game speed: {gameSpeed}</span>
+                <input
+                    type="range"
+                    min={0.01}
+                    max={4}
+                    value={gameSpeed}
+                    step={0.01}
+                    onChange={(e) => setGameState("gameSpeed", e.target.valueAsNumber)}
+                />
+            </div>
+            <div>Current room: {getGameState("currentRoom")?.definition.name ?? ""}</div>
         </div>
     );
 }
