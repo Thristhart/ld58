@@ -55,7 +55,6 @@ function generateWangMap() {
     }));
 }
 const wang = generateWangMap();
-console.log(wang);
 
 export function getValidWangTile(neighbors: { wangIndex: number; direction: Direction }[]) {
     let validTiles = new Set(Array.from({ length: 16 }, (_, i) => i));

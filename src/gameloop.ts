@@ -55,20 +55,20 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
         ignoreNextAutomove = false;
     }
 
-    if (enemyAddTimer >= gameWorld.getGameState("timePerEnemyAdd")) {
-        const newPosition = getRandomPositionNear(gameWorld.player.position, noSpawnWindow, simulationWindow);
-        const direction = getRandomDirection();
-        const enemy = new WingedEnemy(newPosition, gameWorld, direction);
-        gameWorld.addEntity(enemy);
-        enemyAddTimer = 0;
-    }
+    // if (enemyAddTimer >= gameWorld.getGameState("timePerEnemyAdd")) {
+    //     const newPosition = getRandomPositionNear(gameWorld.player.position, noSpawnWindow, simulationWindow);
+    //     const direction = getRandomDirection();
+    //     const enemy = new WingedEnemy(newPosition, gameWorld, direction);
+    //     gameWorld.addEntity(enemy);
+    //     enemyAddTimer = 0;
+    // }
 
-    if (upgradeAddTimer >= gameWorld.getGameState("timePerUpgradeAdd")) {
-        const newPosition = getRandomPositionNear(gameWorld.player.position, noSpawnWindow, simulationWindow);
-        const upgrade = new Upgrade(newPosition, gameWorld, UpgradeType.DualAmmo);
-        gameWorld.addEntity(upgrade);
-        upgradeAddTimer = 0;
-    }
+    // if (upgradeAddTimer >= gameWorld.getGameState("timePerUpgradeAdd")) {
+    //     const newPosition = getRandomPositionNear(gameWorld.player.position, noSpawnWindow, simulationWindow);
+    //     const upgrade = new Upgrade(newPosition, gameWorld, UpgradeType.DualAmmo);
+    //     gameWorld.addEntity(upgrade);
+    //     upgradeAddTimer = 0;
+    // }
 
     const entitiesToSimulate = gameWorld.getEntitiesNear(gameWorld.player.position, simulationWindow);
     for (const entity of entitiesToSimulate) {

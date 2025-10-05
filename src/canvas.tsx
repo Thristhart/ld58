@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { use, useEffect, useRef } from "react";
 import "./canvas.css";
 import { drawFrame } from "./render";
 import { GameWorld } from "./model/gameworld";
+import { imageLoadPromise } from "./images";
 
 function useFitCanvasToWindow(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     useEffect(() => {
@@ -60,6 +61,8 @@ interface CanvasProps {
 }
 export function Canvas(props: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    use(imageLoadPromise);
 
     useFitCanvasToWindow(canvasRef);
 

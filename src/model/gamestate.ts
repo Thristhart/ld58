@@ -17,7 +17,7 @@ export const defaultGameState: GameState = {
     dead: false,
     gameSpeed: 1,
 
-    timePerAutomove: 75,
+    timePerAutomove: 200,
     timePerEnemyAdd: 1000,
     timePerUpgradeAdd: 1000,
 };

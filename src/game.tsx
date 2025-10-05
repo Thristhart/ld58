@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { Suspense, useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Canvas } from "./canvas";
 import "./game.css";
 import { GameWorld } from "./model/gameworld";
@@ -12,29 +12,9 @@ import { Position } from "./model/entity";
 import { Wall } from "./model/entities/wall";
 import { Buzzsaw } from "./model/entities/buzzsaw";
 import { GrassTile } from "./model/entities/grasstile";
-
-function createRoom(gameWorld: GameWorld, centerX: number, centerY: number, size: number) {
-    let candidates: Position[] = [];
-    for (let x = centerX - size; x <= centerX + size; x++) {
-        if (x !== centerX) {
-            candidates.push({ x, y: centerY - size });
-            candidates.push({ x, y: centerY + size });
-        }
-    }
-    for (let y = centerY - size; y <= centerY + size; y++) {
-        if (y !== centerY) {
-            candidates.push({ x: centerX - size, y });
-            candidates.push({ x: centerX + size, y });
-        }
-    }
-    for (const pos of candidates) {
-        if (gameWorld.getEntitiesAt(pos).size > 0) {
-            continue;
-        }
-        const wall = new Wall(pos, gameWorld);
-        gameWorld.addEntity(wall);
-    }
-}
+import { IntroRoom } from "./model/rooms/intro";
+import { BatCountry } from "./model/rooms/batcountry";
+import { ClosedDoor, OpenDoor } from "./model/entities/door";
 
 function createGameWorld() {
     const gameWorld = new GameWorld();
@@ -43,22 +23,33 @@ function createGameWorld() {
     gameWorld.player = new Player({ x: 0, y: 0 }, gameWorld, Direction.East);
     gameWorld.addEntity(gameWorld.player);
     gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
-    gameWorld.player.addSegment();
-    gameWorld.player.tryMove(Direction.North);
+    // gameWorld.player.addSegment();
+    // gameWorld.player.addSegment();
+    // gameWorld.player.addSegment();
+    // gameWorld.player.tryMove(Direction.North);
 
     const initialGrassTile = new GrassTile({ x: 0, y: 0 }, gameWorld, 0);
     gameWorld.addEntity(initialGrassTile);
     initialGrassTile.spread();
 
-    gameWorld.addEntity(new Buzzsaw({ x: 5, y: 5 }, gameWorld));
+    // gameWorld.addEntity(new Buzzsaw({ x: 5, y: 5 }, gameWorld));
 
-    for (let x = -20; x < 20; x++) {
-        for (let y = -20; y < 20; y++) {
-            createRoom(gameWorld, x * 30, y * 30, 15);
+    const intro = gameWorld.createRoom(IntroRoom, {
+        x: -Math.floor(IntroRoom.width / 2),
+        y: -Math.floor(IntroRoom.height / 2),
+    });
+    gameWorld.createRoom(BatCountry, { x: intro.position.x, y: intro.position.y - BatCountry.height - 1 });
+
+    // punch out a door
+    const doorPos = { x: 0, y: -IntroRoom.height / 2 - 1 };
+    const ents = gameWorld.getEntitiesAt(doorPos);
+    for (let ent of ents) {
+        if (ent instanceof Wall) {
+            gameWorld.removeEntity(ent);
         }
     }
+    const door = new OpenDoor(doorPos, gameWorld);
+    gameWorld.addEntity(door);
 
     // @ts-ignore
     window.DEBUG_gameWorld = gameWorld;
@@ -134,7 +125,9 @@ export function Game() {
             <Interface getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
                 {getGameState("dead") && <DeathDialog restart={restart} />}
-                <Canvas gameWorld={gameWorld} />
+                <Suspense>
+                    <Canvas gameWorld={gameWorld} />
+                </Suspense>
             </div>
         </div>
     );

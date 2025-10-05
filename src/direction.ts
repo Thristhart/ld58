@@ -26,6 +26,10 @@ export function getPositionInDirection(position: Position, direction: Direction)
     }
 }
 
+export function addPositions(a: Position, b: Position): Position {
+    return { x: a.x + b.x, y: a.y + b.y };
+}
+
 export function reverseDirection(direction: Direction) {
     switch (direction) {
         case Direction.North:

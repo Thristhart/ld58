@@ -1,11 +1,16 @@
 import { camera } from "./camera";
 import { GRID_SQUARE_SIZE } from "./constants";
 import { GameWorld } from "./model/gameworld";
-import { loadImage } from "./images";
+import { lerp } from "./util";
 
 const frameDurations: number[] = new Array();
 const frameDurationsSampleCount = 20;
 let frameTimeIndex = 0;
+
+let timeSinceCameraPositionChange = 0;
+let oldCameraScale = 1;
+let oldCameraPosition = { x: 0, y: 0 };
+let cameraTransitionDuration = 200;
 
 export function drawFrame(
     dt: number,
@@ -17,31 +22,71 @@ export function drawFrame(
     frameTimeIndex %= frameDurationsSampleCount;
     const averageFrameTime = frameDurations.reduce((prev, current) => prev + current) / frameDurations.length;
 
-    camera.x = gameWorld.player.position.x * GRID_SQUARE_SIZE;
-    camera.y = gameWorld.player.position.y * GRID_SQUARE_SIZE;
+    if (timeSinceCameraPositionChange > 0) {
+        timeSinceCameraPositionChange -= dt;
+    }
+
+    const currentRoom = gameWorld.getRoomContainingPosition(gameWorld.player.position);
+    if (currentRoom) {
+        // + 2 for walls
+        const targetWidthScale = canvas.width / ((currentRoom.definition.width + 2) * GRID_SQUARE_SIZE);
+        const targetHeightScale = canvas.height / ((currentRoom.definition.height + 2) * GRID_SQUARE_SIZE);
+        const smallestScale = Math.min(targetWidthScale, targetHeightScale);
+        if (camera.scale != smallestScale) {
+            timeSinceCameraPositionChange = cameraTransitionDuration;
+            oldCameraScale = camera.scale;
+            camera.scale = smallestScale;
+        }
+
+        const center = currentRoom.centerPoint();
+        const newCameraX = center.x * GRID_SQUARE_SIZE;
+        const newCameraY = center.y * GRID_SQUARE_SIZE;
+        if (camera.x !== newCameraX || camera.y !== newCameraY) {
+            oldCameraPosition = { x: camera.x, y: camera.y };
+            timeSinceCameraPositionChange = cameraTransitionDuration;
+            camera.x = newCameraX;
+            camera.y = newCameraY;
+        }
+    }
+
+    let cameraScale = camera.scale;
+    let cameraX = camera.x;
+    let cameraY = camera.y;
+
+    if (timeSinceCameraPositionChange > 0) {
+        const t = 1 - timeSinceCameraPositionChange / cameraTransitionDuration;
+        cameraScale = lerp(t, oldCameraScale, camera.scale);
+        cameraX = lerp(t, oldCameraPosition.x, camera.x);
+        cameraY = lerp(t, oldCameraPosition.y, camera.y);
+    }
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     context.save();
     context.translate(
-        Math.round((canvas.width / 2 - camera.x - GRID_SQUARE_SIZE / 2) * camera.scale),
-        Math.round((canvas.height / 2 - camera.y - GRID_SQUARE_SIZE / 2) * camera.scale)
+        Math.round(canvas.width / 2 - cameraX * cameraScale),
+        Math.round(canvas.height / 2 - cameraY * cameraScale)
     );
-    context.scale(camera.scale, camera.scale);
+    context.scale(cameraScale, cameraScale);
 
-    const cameraX = Math.floor(camera.x / GRID_SQUARE_SIZE);
-    const cameraY = Math.floor(camera.y / GRID_SQUARE_SIZE);
-    const halfWisibleWidth = Math.ceil(canvas.width / camera.scale / GRID_SQUARE_SIZE / 2);
-    const halfVisibleHeight = Math.ceil(canvas.height / camera.scale / GRID_SQUARE_SIZE / 2);
+    let visibleEntities;
+    if (currentRoom) {
+        visibleEntities = gameWorld.getEntitiesInRoom(currentRoom);
+    } else {
+        const cameraGridX = Math.floor(cameraX / GRID_SQUARE_SIZE);
+        const cameraGridY = Math.floor(cameraY / GRID_SQUARE_SIZE);
+        const halfWisibleWidth = Math.ceil(canvas.width / cameraScale / GRID_SQUARE_SIZE / 2);
+        const halfVisibleHeight = Math.ceil(canvas.height / cameraScale / GRID_SQUARE_SIZE / 2);
 
-    const visibleBounds = {
-        x: cameraX - halfWisibleWidth,
-        y: cameraY - halfVisibleHeight,
-        w: halfWisibleWidth * 2,
-        h: halfVisibleHeight * 2,
-    };
-
-    const visibleEntities = gameWorld.getEntitiesInArea(visibleBounds).sort((a, b) => a.zIndex - b.zIndex);
+        const visibleBounds = {
+            x: cameraGridX - halfWisibleWidth - 1,
+            y: cameraGridY - halfVisibleHeight - 1,
+            w: halfWisibleWidth * 2 + 1,
+            h: halfVisibleHeight * 2 + 1,
+        };
+        visibleEntities = gameWorld.getEntitiesInArea(visibleBounds);
+    }
+    visibleEntities = visibleEntities.sort((a, b) => a.zIndex - b.zIndex);
 
     for (const ent of visibleEntities) {
         ent.draw(context, canvas);
