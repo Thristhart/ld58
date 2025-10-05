@@ -34,6 +34,7 @@ function createGameWorld() {
         x: -Math.floor(levels.basic.width / 2),
         y: -Math.floor(levels.basic.height / 2),
     });
+    gameWorld.setGameState("roomsVisited", gameWorld.getGameState("roomsVisited").add(intro.id));
     // gameWorld.createRoom(BatCountry, { x: intro.position.x, y: intro.position.y - BatCountry.height - 1 });
 
     // punch out a door

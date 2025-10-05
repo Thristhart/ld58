@@ -4,6 +4,7 @@ export interface GameState {
     isPaused: boolean;
     dead: boolean;
     gameSpeed: number;
+    roomsVisited: Set<number>;
 
     timePerAutomove: number;
     timePerEnemyAdd: number;
@@ -16,6 +17,7 @@ export const defaultGameState: GameState = {
     isPaused: false,
     dead: false,
     gameSpeed: 1,
+    roomsVisited: new Set<number>(),
 
     timePerAutomove: 200,
     timePerEnemyAdd: 1000,

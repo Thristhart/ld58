@@ -16,10 +16,12 @@ export interface RoomDefinition {
 export class RoomInstance {
     position: Position;
     definition: RoomDefinition;
+    id: number;
 
-    constructor(position: Position, definition: RoomDefinition) {
+    constructor(position: Position, definition: RoomDefinition, id: number) {
         this.position = position;
         this.definition = definition;
+        this.id = id;
     }
 
     centerPoint() {
