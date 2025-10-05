@@ -95,6 +95,7 @@ export async function loadLevel(name: string, image: ReturnType<typeof loadImage
         width: imageData.width,
         height: imageData.height,
         locations,
+        name,
     };
 
     levels[name] = roomDef;

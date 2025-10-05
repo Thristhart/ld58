@@ -11,6 +11,7 @@ export interface RoomDefinition {
     width: number;
     height: number;
     locations: Map<Position, TileType>;
+    name: string;
 }
 
 export class RoomInstance {
