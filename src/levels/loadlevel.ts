@@ -29,7 +29,24 @@ export const levelLoadPromise = Promise.all([
     loadLevel("cubbies", loadImage(cubbies)),
     loadLevel("equalsmore", loadImage(equalsmore)),
     loadLevel("zoo", loadImage(zoo)),
-]);
+]).then(() => {
+    Object.entries(levels).forEach(([name, level]) => {
+        console.log("name:", name);
+        const rows: number[][] = [];
+        level.locations.forEach((type, location) => {
+            rows[location.x] ??= [];
+            rows[location.x][location.y] = type;
+        });
+        let text = "";
+        for (let x = 0; x < level.width; x++) {
+            text += "\n";
+            for (let y = 0; y < level.height; y++) {
+                text += rows[x][y] ?? " ";
+            }
+        }
+        console.log(text);
+    });
+});
 export const levels: Record<string, RoomDefinition> = {};
 
 function getTileTypeForColor(color: number) {
