@@ -10,6 +10,7 @@ Ship blockers:
 -   Game over screen
 -   Name (or justify Snakman)
 -   Gain flesh over time?
+-   Door num visuals
 
 Nice to have:
 
