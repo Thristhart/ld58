@@ -1,3 +1,4 @@
+import { Input } from "#src/input.ts";
 import { RoomInstance } from "./room";
 
 export interface GameState {
@@ -7,6 +8,7 @@ export interface GameState {
     dead: boolean;
     gameSpeed: number;
     roomsVisited: Set<number>;
+    lastHandledMove: Input | undefined;
 
     timeSinceCameraPositionChange: number;
 
@@ -26,6 +28,8 @@ export const defaultGameState: GameState = {
     dead: false,
     gameSpeed: 1,
     roomsVisited: new Set<number>(),
+    lastHandledMove: undefined,
+
     timeSinceCameraPositionChange: 0,
 
     timePerAutomove: 200,

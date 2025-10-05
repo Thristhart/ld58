@@ -20,7 +20,6 @@ let ignoreNextAutomove = false;
 let simulationWindow = 20;
 let noSpawnWindow = 2;
 export let bufferedMoves: Input[] = [];
-let lastHandledMove: Input | undefined = undefined;
 
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
@@ -28,7 +27,7 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
     enemyAddTimer += dt;
     upgradeAddTimer += dt;
 
-    updateInputs();
+    updateInputs(gameWorld);
 
     if (autoMoveTimer >= gameWorld.getGameState("timePerAutomove")) {
         let nextInput = bufferedMoves.shift();
@@ -75,10 +74,10 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
     }
 }
 
-export function updateInputs() {
+export function updateInputs(gameWorld: GameWorld) {
     let lastInput = [...InputState].at(-1);
-    if (lastHandledMove != lastInput && lastInput !== undefined && bufferedMoves.length < 3) {
+    if (gameWorld.getGameState("lastHandledMove") != lastInput && lastInput !== undefined && bufferedMoves.length < 3) {
         bufferedMoves.push(lastInput);
-        lastHandledMove = lastInput;
+        gameWorld.setGameState("lastHandledMove", lastInput);
     }
 }
