@@ -51,6 +51,7 @@ export class GameWorld {
         const room = new RoomInstance(position, roomDefinition, this.rooms.size);
         let numFoodToSpawn = this.getFoodCountToSpawn(this.gameState.roomsVisited.size);
         let numEnemiesToSpawn = this.getEnemyCountToSpawn(this.gameState.roomsVisited.size);
+        let requirement = this.getOpenDoorRequirement(this.gameState.roomsVisited.size);
         this.rooms.add(room);
         room.definition.locations.forEach((tileType, location) => {
             const pos = addPositions(position, location);
@@ -80,7 +81,7 @@ export class GameWorld {
                 if (location.y === room.definition.height - 1) {
                     facing = Direction.South;
                 }
-                const door = new ClosedDoor(pos, this, 8, room, facing);
+                const door = new ClosedDoor(pos, this, requirement, room, facing);
                 this.addEntity(door);
             }
         });
@@ -277,6 +278,17 @@ export class GameWorld {
             return 5;
         }
         return 7;
+    }
+
+    private getOpenDoorRequirement(numRoomsVisited: number) {
+        if (numRoomsVisited < 3) {
+            return 8 + numRoomsVisited;
+        } else if (numRoomsVisited < 8) {
+            return 8 + Math.floor(numRoomsVisited * 1.5);
+        } else if (numRoomsVisited < 13) {
+            return 8 + Math.floor(numRoomsVisited * 2);
+        }
+        return 8 + Math.floor(numRoomsVisited * 3);
     }
 
     static isPointWithinBox(point: Position, box: { x: number; y: number; w: number; h: number }) {
