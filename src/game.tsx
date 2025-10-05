@@ -2,7 +2,7 @@ import { Direction } from "#src/direction.ts";
 import { Suspense, use, useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Canvas } from "./canvas";
 import "./game.css";
-import { bufferedMoves, tick } from "./gameloop";
+import { bufferedMoves, lastHandledMove, tick } from "./gameloop";
 import { imageLoadPromise } from "./images";
 import { Interface } from "./Interface/Interface";
 import { levelLoadPromise, levels } from "./levels/loadlevel";
@@ -80,6 +80,7 @@ function useGameWorld() {
     const restart = () => {
         setGameWorld(createGameWorld);
         bufferedMoves.splice(0);
+        lastHandledMove.value = undefined;
     };
 
     useEffect(() => {
