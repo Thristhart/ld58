@@ -4,6 +4,7 @@ import { loadImage } from "#src/images.ts";
 
 import pickupImageUrl from "#src/assets/pickup.png";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
+import { ClosedDoor } from "./door";
 const pickupImage = loadImage(pickupImageUrl);
 
 export class Pickup extends Entity {
@@ -13,8 +14,21 @@ export class Pickup extends Entity {
         }
 
         const newPos = this.gameWorld.getRandomEmptyPositionNearPlayer();
-        const newCopy = new Pickup(newPos, this.gameWorld);
-        this.gameWorld.addEntity(newCopy);
+        const currentRoom = this.gameWorld.getRoomContainingPosition(this.gameWorld.player.position)!;
+        const doors = this.gameWorld.getEntitiesInRoom(currentRoom).filter((x) => x instanceof ClosedDoor);
+        let biggestDoor = 0;
+        doors.forEach((x) => {
+            if (x.openRequirements > biggestDoor) {
+                biggestDoor = x.openRequirements;
+            }
+        });
+
+        const pickups = this.gameWorld.getEntitiesInRoom(currentRoom).filter((x) => x instanceof Pickup);
+        let maximumSizePossibleCurrently = this.gameWorld.player.otherSegments.length + pickups.length;
+        if (maximumSizePossibleCurrently <= biggestDoor) {
+            const newCopy = new Pickup(newPos, this.gameWorld);
+            this.gameWorld.addEntity(newCopy);
+        }
     }
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         context.drawImage(

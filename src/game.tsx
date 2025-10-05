@@ -15,7 +15,6 @@ import { GameWorld } from "./model/gameworld";
 function createGameWorld() {
     const gameWorld = new GameWorld();
 
-    gameWorld.addEntity(new Pickup({ x: 3, y: 2 }, gameWorld));
     gameWorld.player = new Player({ x: 0, y: 0 }, gameWorld, Direction.East);
     gameWorld.addEntity(gameWorld.player);
     gameWorld.player.addSegment();

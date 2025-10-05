@@ -71,8 +71,6 @@ export class ClosedDoor extends Wall {
                         break;
                 }
                 this.gameWorld.createRoom(newRoom, newRoomPosition);
-            } else {
-                console.log(this.gameWorld.getRoomContainingPosition(pointInNewRoom), pointInNewRoom);
             }
             this.createdNextRoom = true;
 

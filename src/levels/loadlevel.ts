@@ -54,7 +54,6 @@ export function rotateRoomDefinition(roomDef: RoomDefinition): RoomDefinition {
             x: -(location.y - Math.floor(roomDef.height / 2)) + Math.floor(roomDef.width / 2),
             y: location.x - Math.floor(roomDef.width / 2) + Math.floor(roomDef.height / 2),
         };
-        console.log(location, "becomes", newLocation);
         rotatedLocations.set(newLocation, tileType);
     }
     return { ...roomDef, locations: rotatedLocations };
