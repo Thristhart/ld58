@@ -155,11 +155,13 @@ export class Player extends Segment {
             } else if (entity instanceof Enemy) {
                 this.die();
             } else if (entity instanceof Segment || entity instanceof Wall) {
-                if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
-                    this.die();
-                } else {
-                    this.gameWorld.setGameState("dying", true);
-                    return;
+                if (!(entity === this.gameWorld.player.otherSegments.at(-1))) {
+                    if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
+                        this.die();
+                    } else {
+                        this.gameWorld.setGameState("dying", true);
+                        return;
+                    }
                 }
             }
         }
