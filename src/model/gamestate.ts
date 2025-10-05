@@ -8,6 +8,8 @@ export interface GameState {
     gameSpeed: number;
     roomsVisited: Set<number>;
 
+    timeSinceCameraPositionChange: number;
+
     timePerAutomove: number;
 
     currentRoom?: RoomInstance;
@@ -24,6 +26,7 @@ export const defaultGameState: GameState = {
     dead: false,
     gameSpeed: 1,
     roomsVisited: new Set<number>(),
+    timeSinceCameraPositionChange: 0,
 
     timePerAutomove: 200,
 

@@ -7,7 +7,7 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
     const dt = timestamp - lastFrameTime;
     lastFrameTime = timestamp;
 
-    if (!gameWorld.getGameState("isPaused")) {
+    if (!gameWorld.getGameState("isPaused") && gameWorld.getGameState("timeSinceCameraPositionChange") <= 0) {
         advanceGame(gameWorld, dt * gameWorld.getGameState("gameSpeed"));
     }
 }
@@ -20,7 +20,7 @@ let ignoreNextAutomove = false;
 let simulationWindow = 20;
 let noSpawnWindow = 2;
 export let bufferedMoves: Input[] = [];
-let lastHandledMove: Input | undefined = undefined;
+export let lastHandledMove: { value: Input | undefined } = { value: undefined };
 
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
@@ -77,8 +77,8 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
 
 export function updateInputs() {
     let lastInput = [...InputState].at(-1);
-    if (lastHandledMove != lastInput && lastInput !== undefined && bufferedMoves.length < 3) {
+    if (lastHandledMove.value != lastInput && lastInput !== undefined && bufferedMoves.length < 3) {
         bufferedMoves.push(lastInput);
-        lastHandledMove = lastInput;
+        lastHandledMove.value = lastInput;
     }
 }
