@@ -29,8 +29,8 @@ export function drawDoorText(context: CanvasRenderingContext2D, position: Positi
     );
     context.rotate(angle);
     context.fillStyle = "white";
-    context.font = "bold 48px serif";
+    context.font = "bold 36px serif";
     const textWidth = context.measureText(text).width;
-    context.fillText(text, -(textWidth / 2), GRID_SQUARE_SIZE / 2 - DOOR_PADDING, GRID_SQUARE_SIZE - DOOR_PADDING * 2);
+    context.fillText(text, -(textWidth / 2), GRID_SQUARE_SIZE / 2 - DOOR_PADDING);
     context.restore();
 }
