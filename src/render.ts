@@ -28,9 +28,8 @@ export function drawFrame(
 
     const currentRoom = gameWorld.getRoomContainingPosition(gameWorld.player.position);
     if (currentRoom) {
-        // + 2 for walls
-        const targetWidthScale = canvas.width / ((currentRoom.definition.width + 2) * GRID_SQUARE_SIZE);
-        const targetHeightScale = canvas.height / ((currentRoom.definition.height + 2) * GRID_SQUARE_SIZE);
+        const targetWidthScale = canvas.width / (currentRoom.definition.width * GRID_SQUARE_SIZE);
+        const targetHeightScale = canvas.height / (currentRoom.definition.height * GRID_SQUARE_SIZE);
         const smallestScale = Math.min(targetWidthScale, targetHeightScale);
         if (camera.scale != smallestScale) {
             timeSinceCameraPositionChange = cameraTransitionDuration;

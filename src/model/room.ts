@@ -1,12 +1,16 @@
 import { Position } from "./entity";
-import { GameWorld } from "./gameworld";
+
+export enum TileType {
+    Wall,
+    Door,
+    FoodSpawn,
+    EnemySpawn,
+}
 
 export interface RoomDefinition {
     width: number;
     height: number;
-    initialSpawns?: (gameWorld: GameWorld, room: RoomInstance) => void;
-    // not yet implemented
-    playerEntered?: (gameWorld: GameWorld, room: RoomInstance) => void;
+    locations: Map<Position, TileType>;
 }
 
 export class RoomInstance {
@@ -23,19 +27,17 @@ export class RoomInstance {
     }
 
     containsPoint(point: Position) {
-        // +/- 1 for walls
         return (
-            point.x >= this.position.x - 1 &&
-            point.x <= this.position.x + this.definition.width + 1 &&
-            point.y >= this.position.y - 1 &&
-            point.y <= this.position.y + this.definition.height + 1
+            point.x >= this.position.x &&
+            point.x <= this.position.x + this.definition.width &&
+            point.y >= this.position.y &&
+            point.y <= this.position.y + this.definition.height
         );
     }
 
     *pointsInRoom() {
-        // +/- 1 for walls
-        for (let x = this.position.x - 1; x < this.position.x + this.definition.width + 1; x++) {
-            for (let y = this.position.y - 1; y < this.position.y + this.definition.height + 1; y++) {
+        for (let x = this.position.x; x < this.position.x + this.definition.width; x++) {
+            for (let y = this.position.y; y < this.position.y + this.definition.height; y++) {
                 yield { x, y };
             }
         }

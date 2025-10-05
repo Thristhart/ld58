@@ -3,9 +3,10 @@ import { Player } from "./entities/player";
 import { TileEntity } from "./entities/tile";
 import { Entity, Position } from "./entity";
 import { defaultGameState, GameState } from "./gamestate";
-import { RoomDefinition, RoomInstance } from "./room";
+import { RoomDefinition, RoomInstance, TileType } from "./room";
 import { Wall } from "./entities/wall";
 import { addPositions, Direction, getPositionInDirection } from "#src/direction.ts";
+import { ClosedDoor } from "./entities/door";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
@@ -46,25 +47,35 @@ export class GameWorld {
     public createRoom(roomDefinition: RoomDefinition, position: Position) {
         const room = new RoomInstance(position, roomDefinition);
         this.rooms.add(room);
-        let candidates: { x: number; y: number; direction?: number }[] = [];
-        for (let x = position.x - 1; x <= position.x + roomDefinition.width; x++) {
-            candidates.push({ x, y: position.y - 1, direction: Direction.North });
-            candidates.push({ x, y: position.y + roomDefinition.height, direction: Direction.North });
-        }
-        for (let y = position.y - 1; y <= position.y + roomDefinition.height; y++) {
-            candidates.push({ x: position.x - 1, y, direction: Direction.West });
-            candidates.push({ x: position.x + roomDefinition.width, y, direction: Direction.West });
-        }
-        for (const pos of candidates) {
-            if (this.getEntitiesAt(pos).size > 0) {
-                continue;
+        console.log(room.definition.locations);
+        room.definition.locations.forEach((tileType, location) => {
+            const pos = addPositions(position, location);
+            if (tileType === TileType.Wall) {
+                let facing = Direction.North;
+                if (location.x === 0) {
+                    facing = Direction.West;
+                }
+                if (location.x === room.definition.width - 1) {
+                    facing = Direction.East;
+                }
+                const wall = new Wall(pos, this, facing);
+                this.addEntity(wall);
             }
-            const wall = new Wall(pos, this, pos.direction);
-            this.addEntity(wall);
-        }
-        if (roomDefinition.initialSpawns) {
-            roomDefinition.initialSpawns(this, room);
-        }
+            if (tileType === TileType.Door) {
+                let facing = Direction.North;
+                if (location.x === 0) {
+                    facing = Direction.West;
+                }
+                if (location.x === room.definition.width - 1) {
+                    facing = Direction.East;
+                }
+                if (location.y === room.definition.height - 1) {
+                    facing = Direction.South;
+                }
+                const door = new ClosedDoor(pos, this, facing);
+                this.addEntity(door);
+            }
+        });
         return room;
     }
 

@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { Suspense, use, useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { Canvas } from "./canvas";
 import "./game.css";
 import { GameWorld } from "./model/gameworld";
@@ -12,9 +12,10 @@ import { Position } from "./model/entity";
 import { Wall } from "./model/entities/wall";
 import { Buzzsaw } from "./model/entities/buzzsaw";
 import { GrassTile } from "./model/entities/grasstile";
-import { IntroRoom } from "./model/rooms/intro";
 import { BatCountry } from "./model/rooms/batcountry";
 import { ClosedDoor, OpenDoor } from "./model/entities/door";
+import { imageLoadPromise } from "./images";
+import { levelLoadPromise, levels } from "./levels/loadlevel";
 
 function createGameWorld() {
     const gameWorld = new GameWorld();
@@ -34,22 +35,22 @@ function createGameWorld() {
 
     // gameWorld.addEntity(new Buzzsaw({ x: 5, y: 5 }, gameWorld));
 
-    const intro = gameWorld.createRoom(IntroRoom, {
-        x: -Math.floor(IntroRoom.width / 2),
-        y: -Math.floor(IntroRoom.height / 2),
+    const intro = gameWorld.createRoom(levels.basic, {
+        x: -Math.floor(levels.basic.width / 2),
+        y: -Math.floor(levels.basic.height / 2),
     });
-    gameWorld.createRoom(BatCountry, { x: intro.position.x, y: intro.position.y - BatCountry.height - 1 });
+    // gameWorld.createRoom(BatCountry, { x: intro.position.x, y: intro.position.y - BatCountry.height - 1 });
 
     // punch out a door
-    const doorPos = { x: 0, y: -IntroRoom.height / 2 - 1 };
-    const ents = gameWorld.getEntitiesAt(doorPos);
-    for (let ent of ents) {
-        if (ent instanceof Wall) {
-            gameWorld.removeEntity(ent);
-        }
-    }
-    const door = new OpenDoor(doorPos, gameWorld);
-    gameWorld.addEntity(door);
+    // const doorPos = { x: 0, y: -IntroRoom.height / 2 - 1 };
+    // const ents = gameWorld.getEntitiesAt(doorPos);
+    // for (let ent of ents) {
+    //     if (ent instanceof Wall) {
+    //         gameWorld.removeEntity(ent);
+    //     }
+    // }
+    // const door = new OpenDoor(doorPos, gameWorld);
+    // gameWorld.addEntity(door);
 
     // @ts-ignore
     window.DEBUG_gameWorld = gameWorld;
@@ -118,17 +119,31 @@ function DeathDialog(props: DeathDialogProps) {
     );
 }
 
-export function Game() {
+function GameLoaded() {
     const { gameWorld, getGameState, setGameState, restart } = useGameWorld();
     return (
-        <div className="Container">
+        <>
             <Interface getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
                 {getGameState("dead") && <DeathDialog restart={restart} />}
-                <Suspense>
-                    <Canvas gameWorld={gameWorld} />
-                </Suspense>
+                <Canvas gameWorld={gameWorld} />
             </div>
+        </>
+    );
+}
+
+function LoadGameDeps() {
+    use(imageLoadPromise);
+    use(levelLoadPromise);
+    return <GameLoaded />;
+}
+
+export function Game() {
+    return (
+        <div className="Container">
+            <Suspense>
+                <LoadGameDeps />
+            </Suspense>
         </div>
     );
 }

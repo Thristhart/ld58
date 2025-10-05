@@ -3,6 +3,7 @@ import "./canvas.css";
 import { drawFrame } from "./render";
 import { GameWorld } from "./model/gameworld";
 import { imageLoadPromise } from "./images";
+import { levelLoadPromise } from "./levels/loadlevel";
 
 function useFitCanvasToWindow(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     useEffect(() => {
@@ -61,8 +62,6 @@ interface CanvasProps {
 }
 export function Canvas(props: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    use(imageLoadPromise);
 
     useFitCanvasToWindow(canvasRef);
 
