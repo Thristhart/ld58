@@ -5,8 +5,10 @@ import { Entity, Position } from "./entity";
 import { defaultGameState, GameState } from "./gamestate";
 import { RoomDefinition, RoomInstance, TileType } from "./room";
 import { Wall } from "./entities/wall";
-import { addPositions, Direction, getPositionInDirection } from "#src/direction.ts";
+import { addPositions, Direction, getPositionInDirection, getRandomDirection } from "#src/direction.ts";
 import { ClosedDoor } from "./entities/door";
+import { WingedEnemy } from "./entities/wingedenemy";
+import { Pickup } from "./entities/pickup";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
@@ -77,6 +79,20 @@ export class GameWorld {
                 }
                 const door = new ClosedDoor(pos, this, 8, room, facing);
                 this.addEntity(door);
+            }
+            if (tileType === TileType.EnemySpawn) {
+                const enemySpawnRand = Math.floor(Math.random() * 100);
+                if (enemySpawnRand < this.gameState.enemyChanceMultiplier) {
+                    const enemy = new WingedEnemy(pos, this, getRandomDirection());
+                    this.addEntity(enemy);
+                }
+            }
+            if (tileType === TileType.FoodSpawn) {
+                const foodSpawnRand = Math.floor(Math.random() * 100);
+                if (foodSpawnRand < this.gameState.foodChanceMultiplier) {
+                    const food = new Pickup(pos, this, Direction.North);
+                    this.addEntity(food);
+                }
             }
         });
         return room;

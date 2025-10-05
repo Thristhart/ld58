@@ -7,6 +7,7 @@ import wingedEnemyUrl from "#src/assets/wingedenemy.png";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
 import { Segment } from "./player";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
+import { OpenDoor } from "./door";
 const wingedEnemyImage = loadImage(wingedEnemyUrl);
 
 export class WingedEnemy extends Enemy {
@@ -17,7 +18,7 @@ export class WingedEnemy extends Enemy {
         const nextPosition = getPositionInDirection(this.position, this.facing);
         const entitiesAtPos = this.gameWorld.getEntitiesAt(nextPosition);
         for (const entity of entitiesAtPos) {
-            if (entity instanceof Wall) {
+            if (entity instanceof Wall || entity instanceof OpenDoor) {
                 this.facing = reverseDirection(this.facing);
                 return;
             }

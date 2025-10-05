@@ -23,7 +23,6 @@ export function Points(props: {
     return (
         <div>
             <div>Points: {points}</div>
-            <button onClick={() => setGameState("points", points + 1)}>Add Points</button>
         </div>
     );
 }

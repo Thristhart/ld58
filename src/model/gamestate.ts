@@ -1,3 +1,5 @@
+import { LargeNumberLike } from "crypto";
+
 export interface GameState {
     points: number;
     dying: boolean;
@@ -6,8 +8,10 @@ export interface GameState {
     gameSpeed: number;
 
     timePerAutomove: number;
-    timePerEnemyAdd: number;
-    timePerUpgradeAdd: number;
+
+    // 1-100
+    enemyChanceMultiplier: number;
+    foodChanceMultiplier: number;
 }
 
 export const defaultGameState: GameState = {
@@ -18,6 +22,7 @@ export const defaultGameState: GameState = {
     gameSpeed: 1,
 
     timePerAutomove: 200,
-    timePerEnemyAdd: 1000,
-    timePerUpgradeAdd: 1000,
+
+    enemyChanceMultiplier: 5,
+    foodChanceMultiplier: 50,
 };

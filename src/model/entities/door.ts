@@ -21,6 +21,7 @@ export class OpenDoor extends TileEntity {
 export class ClosedDoor extends Wall {
     openRequirements: number;
     myRoom: RoomInstance;
+    createdNextRoom: boolean = false;
 
     constructor(
         position: Position,
@@ -40,7 +41,7 @@ export class ClosedDoor extends Wall {
     }
 
     think(dt: number) {
-        if (this.gameWorld.player.otherSegments.length + 1 > this.openRequirements) {
+        if (this.gameWorld.player.otherSegments.length + 1 > this.openRequirements && !this.createdNextRoom) {
             const newRoom = levels.basic;
             let newRoomPosition: Position;
             switch (this.facing) {
@@ -64,6 +65,7 @@ export class ClosedDoor extends Wall {
                     break;
             }
             this.gameWorld.createRoom(newRoom, newRoomPosition);
+            this.createdNextRoom = true;
 
             this.gameWorld.addEntity(this.makeOpen());
             this.gameWorld.removeEntity(this);
