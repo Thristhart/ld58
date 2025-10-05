@@ -6,7 +6,7 @@ import { Position } from "../entity";
 import { TileEntity } from "./tile";
 import { Wall } from "./wall";
 import { GameWorld } from "../gameworld";
-import { Direction, getPositionInDirection } from "../../direction";
+import { Direction, getPositionInDirection, reverseDirection } from "../../direction";
 import { RoomInstance } from "../room";
 import { getRoomToGenerateForDoor, levels } from "#src/levels/loadlevel.ts";
 
@@ -14,8 +14,19 @@ const openDoorImage = loadImage(openDoorImageUrl);
 const closedDoorImage = loadImage(closedDoorImageUrl);
 
 export class OpenDoor extends TileEntity {
+    myRoom: RoomInstance;
+    constructor(position: Position, gameWorld: GameWorld, myRoom: RoomInstance, facing: Direction = Direction.North) {
+        super(position, gameWorld, facing);
+        this.myRoom = myRoom;
+    }
+
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
-        drawRotatedImage(context, openDoorImage.bitmap, this.position, (Math.PI / 2) * this.facing);
+        const currentRoom = this.gameWorld.getGameState("currentRoom");
+        let facing = this.facing;
+        if (currentRoom && currentRoom !== this.myRoom) {
+            facing = reverseDirection(this.facing);
+        }
+        drawRotatedImage(context, openDoorImage.bitmap, this.position, (Math.PI / 2) * facing);
     }
 }
 export class ClosedDoor extends Wall {
@@ -73,8 +84,6 @@ export class ClosedDoor extends Wall {
                         break;
                 }
                 this.gameWorld.createRoom(newRoom, newRoomPosition);
-            } else {
-                console.log(this.gameWorld.getRoomContainingPosition(pointInNewRoom), pointInNewRoom);
             }
             this.createdNextRoom = true;
 
@@ -84,6 +93,6 @@ export class ClosedDoor extends Wall {
     }
 
     makeOpen() {
-        return new OpenDoor(this.position, this.gameWorld, this.facing);
+        return new OpenDoor(this.position, this.gameWorld, this.myRoom, this.facing);
     }
 }

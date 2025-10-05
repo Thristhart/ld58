@@ -1,6 +1,5 @@
 Ship blockers:
 
--   Doors facing wrong direction in new rooms
 -   Pause some amount when entering a room (maybe: pause sim while transitioning?)
 -   Food should only spawn on food spawn locations
 -   Food should only spawn up to door requirement count
@@ -10,7 +9,6 @@ Ship blockers:
 -   Game over screen
 -   Name (or justify Snakman)
 -   Gain flesh over time?
--   Door num visuals
 
 Nice to have:
 
