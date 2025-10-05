@@ -79,11 +79,9 @@ export function rotateRoomDefinition(roomDef: RoomDefinition): RoomDefinition {
 export async function loadLevel(name: string, image: ReturnType<typeof loadImage>): Promise<RoomDefinition> {
     await image.promise;
 
-    const canvas = document.createElement("canvas");
-    canvas.width = image.width;
-    canvas.height = image.height;
+    const canvas = new OffscreenCanvas(image.bitmap.width, image.bitmap.height);
     const context = canvas.getContext("2d")!;
-    context.drawImage(image, 0, 0, image.bitmap.width, image.bitmap.height);
+    context.drawImage(image.bitmap, 0, 0, image.bitmap.width, image.bitmap.height);
     const imageData = context.getImageData(0, 0, image.bitmap.width, image.bitmap.height);
     const locations = new Map<Position, TileType>();
     for (let i = 0; i < imageData.data.length; i += 4) {
