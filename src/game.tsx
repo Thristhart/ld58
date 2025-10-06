@@ -178,6 +178,9 @@ function GameLoaded() {
                     <PauseDialog
                         unpause={() => {
                             setGameState("isPaused", false);
+                            if (!bgm.playing()) {
+                                bgm.play();
+                            }
                         }}
                     />
                 )}
