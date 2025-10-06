@@ -3,11 +3,16 @@ import { Input, InputState } from "./input";
 import { GameWorld } from "./model/gameworld";
 
 let lastFrameTime = performance.now();
+let pauseTimer = 0;
+
 export function tick(gameWorld: GameWorld, timestamp: number) {
     const dt = timestamp - lastFrameTime;
     lastFrameTime = timestamp;
 
-    if (!gameWorld.getGameState("isPaused") && gameWorld.getGameState("timeSinceCameraPositionChange") <= 0) {
+    if (
+        !(gameWorld.getGameState("isPaused") || pauseTimer > 0) &&
+        gameWorld.getGameState("timeSinceCameraPositionChange") <= 0
+    ) {
         try {
             advanceGame(gameWorld, dt * gameWorld.getGameState("gameSpeed"));
         } catch (e) {
@@ -15,6 +20,9 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
                 throw e;
             }
         }
+    }
+    if (pauseTimer > 0) {
+        pauseTimer -= dt;
     }
 }
 
@@ -64,10 +72,9 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
         if (!ignoreNextAutomove) {
             let isInANewRoom = gameWorld.player.tryMove(nextFacing ?? gameWorld.player.facing);
             if (isInANewRoom) {
-                autoMoveTimer = -500;
-            } else {
-                autoMoveTimer = 0;
+                pauseTimer = 500;
             }
+            autoMoveTimer = 0;
         }
         ignoreNextAutomove = false;
     }

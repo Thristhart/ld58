@@ -2,6 +2,7 @@ import { camera } from "./camera";
 import { GRID_SQUARE_SIZE } from "./constants";
 import { TileEntity } from "./model/entities/tile";
 import { GameWorld } from "./model/gameworld";
+import { RoomInstance } from "./model/room";
 import { lerp } from "./util";
 
 const frameDurations: number[] = new Array();
@@ -12,6 +13,8 @@ let timeSinceCameraPositionChange = 0;
 let oldCameraScale = 1;
 let oldCameraPosition = { x: 0, y: 0 };
 let cameraTransitionDuration = 200;
+let lastNumRooms = 0;
+let currentRoom: RoomInstance | undefined;
 
 export function tickFrame(
     dt: number,
@@ -36,7 +39,10 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
         );
     }
 
-    const currentRoom = gameWorld.getRoomContainingPosition(gameWorld.player.position);
+    const allRooms = gameWorld.getRoomsContainingPosition(gameWorld.player.position);
+    if ((lastNumRooms === 2 || lastNumRooms === 0) && allRooms.length === 1) {
+        currentRoom = allRooms[0];
+    }
     if (currentRoom) {
         const targetWidthScale = canvas.width / (currentRoom.definition.width * GRID_SQUARE_SIZE);
         const targetHeightScale = canvas.height / (currentRoom.definition.height * GRID_SQUARE_SIZE);

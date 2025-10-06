@@ -27,6 +27,7 @@ import { Enemy } from "./enemy";
 import { Upgrade, UpgradeType } from "./upgrade";
 import { Wall } from "./wall";
 import { bgm, chomp, cuteAnimalDie } from "#src/audio.ts";
+import { RoomInstance } from "../room";
 const headImage = loadImage(headImageUrl);
 const segmentStraightImage = loadImage(segmentStraightImageUrl);
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
@@ -35,6 +36,8 @@ const fleshHeadImage = loadImage(fleshHeadImageUrl);
 const fleshSegmentCurveImage = loadImage(fleshSegmentCurveImageUrl);
 const fleshSegmentStraightImage = loadImage(fleshSegmentStraightImageUrl);
 const fleshSegmentTailImage = loadImage(fleshSegmentTailImageUrl);
+
+let lastNumRooms = 0;
 
 enum AmmoType {
     None = "None",
@@ -230,13 +233,15 @@ export class Player extends Segment {
         let lastPosition = nextPosition;
         let nextType = SegmentType.Head;
 
-        const currentRoom = this.gameWorld.getRoomContainingPosition(this.position);
-        const nextRoom = this.gameWorld.getRoomContainingPosition(nextPosition);
-        if (currentRoom?.id !== nextRoom?.id && nextRoom?.id !== undefined) {
+        const allRooms = this.gameWorld.getRoomsContainingPosition(nextPosition);
+        const nextRoom = this.gameWorld.getRoomContainingPosition(nextPosition)!;
+        if ((lastNumRooms === 2 || lastNumRooms === 0) && allRooms.length === 1) {
+            //exiting doorway
             this.gameWorld.setGameState("roomsVisited", this.gameWorld.getGameState("roomsVisited").add(nextRoom.id));
             this.gameWorld.setGameState("currentRoom", nextRoom);
             isMovingRooms = true;
         }
+        lastNumRooms = allRooms.length;
 
         const segments = [this, ...this.otherSegments];
         for (const segment of segments) {
