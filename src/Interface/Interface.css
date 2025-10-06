@@ -1,18 +1,20 @@
 .LeftInterface {
-    background-color: #082b38;
     z-index: 2;
     padding: 0;
     box-sizing: border-box;
-    flex-grow: 1;
-    position: relative;
+    position: absolute;
+    width: var(--marginSize, 0);
+    height: 100%;
+    inset-inline-start: 0;
 }
 .RightInterface {
-    background-color: #082b38;
     z-index: 2;
     padding: 0;
     box-sizing: border-box;
-    flex-grow: 1;
-    position: relative;
+    position: absolute;
+    width: var(--marginSize, 0);
+    height: 100%;
+    inset-inline-end: 0;
 }
 
 .MinimapContainer {

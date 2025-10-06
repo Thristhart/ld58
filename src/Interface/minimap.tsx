@@ -15,6 +15,15 @@ function useFitCanvasToContainer(canvasRef: React.RefObject<HTMLCanvasElement | 
         canvas.width = parentRect?.width || 0;
         canvas.height = parentRect?.height || 0;
 
+        const resizeObserver = new ResizeObserver(() => {
+            const parentRect = canvas.parentElement?.getBoundingClientRect();
+            canvas.width = parentRect?.width || 0;
+            canvas.height = parentRect?.height || 0;
+        });
+        if (canvas.parentElement) {
+            resizeObserver.observe(canvas.parentElement);
+        }
+
         const onResize = () => {
             const parentRect = canvas.parentElement?.getBoundingClientRect();
             canvas.width = parentRect?.width || 0;
@@ -23,6 +32,7 @@ function useFitCanvasToContainer(canvasRef: React.RefObject<HTMLCanvasElement | 
         window.addEventListener("resize", onResize, { passive: true });
         return () => {
             window.removeEventListener("resize", onResize);
+            resizeObserver.disconnect();
         };
     }, []);
 }
