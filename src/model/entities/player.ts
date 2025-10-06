@@ -27,7 +27,6 @@ import { Enemy } from "./enemy";
 import { Upgrade, UpgradeType } from "./upgrade";
 import { Wall } from "./wall";
 import { bgm, chomp, cuteAnimalDie } from "#src/audio.ts";
-import { RoomInstance } from "../room";
 const headImage = loadImage(headImageUrl);
 const segmentStraightImage = loadImage(segmentStraightImageUrl);
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
