@@ -7,7 +7,6 @@ import { imageLoadPromise } from "./images";
 import { Interface } from "./Interface/Interface";
 import { levelLoadPromise, levels } from "./levels/loadlevel";
 import { GrassTile } from "./model/entities/grasstile";
-import { Pickup } from "./model/entities/pickup";
 import { Player } from "./model/entities/player";
 import { GameState } from "./model/gamestate";
 import { GameWorld } from "./model/gameworld";
@@ -15,37 +14,19 @@ import { GameWorld } from "./model/gameworld";
 function createGameWorld() {
     const gameWorld = new GameWorld();
 
-    gameWorld.player = new Player({ x: 0, y: 0 }, gameWorld, Direction.East);
-    gameWorld.addEntity(gameWorld.player);
-    gameWorld.player.addSegment();
-    // gameWorld.player.addSegment();
-    // gameWorld.player.addSegment();
-    // gameWorld.player.addSegment();
-    // gameWorld.player.tryMove(Direction.North);
-
-    const initialGrassTile = new GrassTile({ x: 0, y: 0 }, gameWorld, 0);
-    gameWorld.addEntity(initialGrassTile);
-    initialGrassTile.spread();
-
-    // gameWorld.addEntity(new Buzzsaw({ x: 5, y: 5 }, gameWorld));
-
     const intro = gameWorld.createRoom(levels.basic, {
         x: -Math.floor(levels.basic.width / 2),
         y: -Math.floor(levels.basic.height / 2),
     });
     gameWorld.setGameState("roomsVisited", gameWorld.getGameState("roomsVisited").add(intro.id));
-    // gameWorld.createRoom(BatCountry, { x: intro.position.x, y: intro.position.y - BatCountry.height - 1 });
 
-    // punch out a door
-    // const doorPos = { x: 0, y: -IntroRoom.height / 2 - 1 };
-    // const ents = gameWorld.getEntitiesAt(doorPos);
-    // for (let ent of ents) {
-    //     if (ent instanceof Wall) {
-    //         gameWorld.removeEntity(ent);
-    //     }
-    // }
-    // const door = new OpenDoor(doorPos, gameWorld);
-    // gameWorld.addEntity(door);
+    gameWorld.player = new Player({ x: 0, y: 0 }, gameWorld, Direction.East);
+    gameWorld.addEntity(gameWorld.player);
+    gameWorld.player.addSegment();
+
+    const initialGrassTile = new GrassTile({ x: 0, y: 0 }, gameWorld, 0);
+    gameWorld.addEntity(initialGrassTile);
+    initialGrassTile.spread();
 
     // @ts-ignore
     window.DEBUG_gameWorld = gameWorld;
@@ -126,7 +107,9 @@ function PauseDialog(props: PauseDialogProps) {
                 <p>collect and eat delicious eggs to regrow your flesh</p>
                 <p>eat enemies but avoid letting them hit you</p>
                 <p>don't run into yourself</p>
-                <button onClick={props.unpause}>let's go</button>
+                <button autoFocus onClick={props.unpause}>
+                    let's go
+                </button>
             </section>
         </dialog>
     );

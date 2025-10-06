@@ -67,6 +67,13 @@ export class GrassTile extends TileEntity {
             const newWangIndex = getValidWangTile(neighbors);
             const newTile = new GrassTile(targetPosition, gameWorld, newWangIndex);
             gameWorld.addEntity(newTile);
+            if (
+                gameWorld.getRoomContainingPosition(targetPosition) &&
+                gameWorld.getRoomContainingPosition(targetPosition) ==
+                    gameWorld.getRoomContainingPosition(gameWorld.player.position)
+            ) {
+                newTile.think(0);
+            }
         }
     }
 }
