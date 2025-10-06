@@ -37,3 +37,21 @@ const cuteDeath = [
 export function cuteAnimalDie() {
     cuteDeath[Math.floor(Math.random() * cuteDeath.length)].play();
 }
+
+import leafCrunch1Url from "#src/assets/sounds/leaf_crunch_1.mp3";
+import leafCrunch2Url from "#src/assets/sounds/leaf_crunch_2.mp3";
+import leafCrunch3Url from "#src/assets/sounds/leaf_crunch_3.mp3";
+import leafCrunch4Url from "#src/assets/sounds/leaf_crunch_4.mp3";
+import leafCrunch5Url from "#src/assets/sounds/leaf_crunch_5.mp3";
+
+const leafCrunches = [
+    new Howl({ src: leafCrunch1Url, rate: 1.5 }),
+    new Howl({ src: leafCrunch2Url, rate: 1.5 }),
+    new Howl({ src: leafCrunch3Url, rate: 1.5 }),
+    new Howl({ src: leafCrunch4Url, rate: 1.5 }),
+    new Howl({ src: leafCrunch5Url, rate: 1.5 }),
+];
+
+export function leafCrunch() {
+    leafCrunches[Math.floor(Math.random() * leafCrunches.length)].play();
+}
