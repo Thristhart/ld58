@@ -26,7 +26,6 @@ import { Buzzsaw } from "./buzzsaw";
 import { Bullet } from "./bullet";
 import { Upgrade, UpgradeType } from "./upgrade";
 import { Enemy } from "./enemy";
-import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 const segmentTailImage = loadImage(segmentTailImageUrl);
 
 enum AmmoType {
@@ -93,7 +92,9 @@ export class Segment extends Entity {
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
-        if (this.segmentType === SegmentType.Straight) {
+        if (this.segmentType === SegmentType.Head) {
+            drawRotatedImage(context, headImage.bitmap, this.position, (Math.PI / 2) * this.facing);
+        } else if (this.segmentType === SegmentType.Straight) {
             drawRotatedImage(context, segmentStraightImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         } else if (this.segmentType === SegmentType.LeftCurve) {
             drawRotatedImage(context, segmentCurveImage.bitmap, this.position, (Math.PI / 2) * (this.facing - 1));
@@ -219,23 +220,5 @@ export class Player extends Segment {
             tail.segmentType = SegmentType.Tail;
             tail.facing = beforeTail.facing;
         }
-    }
-    draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
-        context.save();
-        context.translate(
-            this.position.x * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2,
-            this.position.y * GRID_SQUARE_SIZE + GRID_SQUARE_SIZE / 2
-        );
-        context.rotate((Math.PI / 2) * this.facing);
-        context.fillStyle = "blue";
-        context.fillRect(-7, -10, 18, 15);
-        context.drawImage(
-            headImage.bitmap,
-            -GRID_SQUARE_SIZE / 2,
-            -GRID_SQUARE_SIZE / 2,
-            GRID_SQUARE_SIZE + 1,
-            GRID_SQUARE_SIZE + 1
-        );
-        context.restore();
     }
 }

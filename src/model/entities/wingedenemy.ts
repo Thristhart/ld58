@@ -8,6 +8,7 @@ import { drawRotatedImage } from "#src/drawRotatedImage.ts";
 import { Segment } from "./player";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 import { OpenDoor } from "./door";
+import { Bullet } from "./bullet";
 const wingedEnemyImage = loadImage(wingedEnemyUrl);
 
 export class WingedEnemy extends Enemy {
@@ -24,6 +25,15 @@ export class WingedEnemy extends Enemy {
             }
             if (entity instanceof Segment) {
                 entity.die();
+            }
+            if (entity instanceof Bullet) {
+                this.die();
+                if (!entity.numEnemyPierce) {
+                    entity.removeBullet();
+                    return;
+                } else {
+                    entity.numEnemyPierce--;
+                }
             }
             if (entity instanceof Enemy) {
                 this.facing = getRandomDirection();
