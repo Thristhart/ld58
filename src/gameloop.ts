@@ -28,6 +28,13 @@ let noSpawnWindow = 2;
 export let bufferedMoves: Input[] = [];
 export let lastHandledMove: { value: Input | undefined } = { value: undefined };
 
+function calculateAutoMoveTimeForPlayerLength(playerLength: number) {
+    if (playerLength > 50) {
+        return 50;
+    }
+    return (-25 / 8) * playerLength + 825 / 4;
+}
+
 let nextFacing: Direction | undefined = undefined;
 function advanceGame(gameWorld: GameWorld, dt: number) {
     autoMoveTimer += dt;
@@ -35,6 +42,10 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
     upgradeAddTimer += dt;
 
     updateInputs();
+    gameWorld.setGameState(
+        "timePerAutomove",
+        calculateAutoMoveTimeForPlayerLength(gameWorld.player.otherSegments.length)
+    );
 
     if (autoMoveTimer >= gameWorld.getGameState("timePerAutomove")) {
         let nextInput = bufferedMoves.shift();
