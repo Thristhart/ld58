@@ -11,8 +11,11 @@ Sentry.init({
     replaysOnErrorSampleRate: 1,
     tracesSampleRate: 1.0,
     integrations: [
-        // Sentry.replayCanvasIntegration(),
-        // Sentry.replayIntegration(),
+        Sentry.replayCanvasIntegration(),
+        Sentry.replayIntegration({
+            maskAllText: false,
+            blockAllMedia: false,
+        }),
         Sentry.browserTracingIntegration(),
         Sentry.browserProfilingIntegration(),
     ],
