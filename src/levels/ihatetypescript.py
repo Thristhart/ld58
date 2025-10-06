@@ -3,7 +3,7 @@ every_levelname = ["basic","basketball","boxes1","boxes2","c_shape","canyon_1","
 #I have to write some very repetitious typescript
 #So I'm making a python script to do it for me instead
 
-importline = "import {lname} from \".\\{lname}.png\";\n"
+importline = "import {lname} from \"./{lname}.png\";\n"
 exportline = "    loadLevel(\"{lname}\", loadImage({lname})),\n"
 
 importlines=[]

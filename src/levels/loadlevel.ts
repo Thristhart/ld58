@@ -14,22 +14,22 @@ corners mixed
 boxes 2
 */
 
-import basic from ".\basic.png";
-import basketball from ".\basketball.png";
-import boxes1 from ".\boxes1.png";
-import boxes2 from ".\boxes2.png";
-import c_shape from ".\c_shape.png";
-import canyon_1 from ".\canyon_1.png";
-import corners_in from ".\corners_in.png";
-import corners_mixes from ".\corners_mixes.png";
-import corners_out from ".\corners_out.png";
-import corners_up from ".\corners_up.png";
-import cubbies from ".\cubbies.png";
-import equalsmore from ".\equalsmore.png";
-import letmein from ".\letmein.png";
-import LL from ".\LL.png";
-import plus from ".\plus.png";
-import zoo from ".\zoo.png";
+import basic from "./basic.png";
+import basketball from "./basketball.png";
+import boxes1 from "./boxes1.png";
+import boxes2 from "./boxes2.png";
+import c_shape from "./c_shape.png";
+import canyon_1 from "./canyon_1.png";
+import corners_in from "./corners_in.png";
+import corners_mixes from "./corners_mixes.png";
+import corners_out from "./corners_out.png";
+import corners_up from "./corners_up.png";
+import cubbies from "./cubbies.png";
+import equalsmore from "./equalsmore.png";
+import letmein from "./letmein.png";
+import LL from "./LL.png";
+import plus from "./plus.png";
+import zoo from "./zoo.png";
 
 
 export const levelLoadPromise = Promise.all([
