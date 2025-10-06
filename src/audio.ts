@@ -23,3 +23,17 @@ const chomps = [
 export function chomp() {
     chomps[Math.floor(Math.random() * chomps.length)].play();
 }
+
+import cuteAnimalDying1Url from "#src/assets/sounds/cute_animal_dying_1.mp3";
+import cuteAnimalDying2Url from "#src/assets/sounds/cute_animal_dying_2.mp3";
+import cuteAnimalDying3Url from "#src/assets/sounds/cute_animal_dying_3.mp3";
+
+const cuteDeath = [
+    new Howl({ src: cuteAnimalDying1Url, rate: 1.5 }),
+    new Howl({ src: cuteAnimalDying2Url, rate: 1.5 }),
+    new Howl({ src: cuteAnimalDying3Url, rate: 1.5 }),
+];
+
+export function cuteAnimalDie() {
+    cuteDeath[Math.floor(Math.random() * cuteDeath.length)].play();
+}
