@@ -20,6 +20,24 @@ export function drawRotatedImage(
     context.drawImage(image, -GRID_SQUARE_SIZE / 2, -GRID_SQUARE_SIZE / 2, GRID_SQUARE_SIZE + 1, GRID_SQUARE_SIZE + 1);
     context.restore();
 }
+export function drawRotatedImageOffGrid(
+    context: CanvasRenderingContext2D,
+    image: CanvasImageSource,
+    position: Position,
+    width: number,
+    height: number,
+    angle: number,
+    flip?: boolean
+) {
+    context.save();
+    context.translate(position.x, position.y);
+    if (flip) {
+        context.scale(-1, 1);
+    }
+    context.rotate(angle);
+    context.drawImage(image, -width / 2, -height / 2, width, height);
+    context.restore();
+}
 
 export function drawDoorText(context: CanvasRenderingContext2D, position: Position, angle: number, text: string) {
     context.save();

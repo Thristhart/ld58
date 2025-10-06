@@ -44,8 +44,7 @@ enum SegmentType {
 export class Segment extends Entity {
     segmentType: SegmentType = SegmentType.Straight;
     ammoType: AmmoType = AmmoType.Basic;
-    timeSinceBullet = 0;
-    timePerBullet = 1000;
+    fireBulletAfter = 0;
 
     constructor(position: Position, gameWorld: GameWorld, facing: Direction, ammoType: AmmoType) {
         super(position, gameWorld, facing);
@@ -62,10 +61,11 @@ export class Segment extends Entity {
     }
 
     think(dt: number): void {
-        this.timeSinceBullet += dt;
-        if (this.timeSinceBullet > this.timePerBullet) {
-            this.timeSinceBullet = 0;
-            this.addBullet();
+        if (this.fireBulletAfter > 0) {
+            this.fireBulletAfter -= dt;
+            if (this.fireBulletAfter <= 0) {
+                this.addBullet();
+            }
         }
     }
 
@@ -75,15 +75,19 @@ export class Segment extends Entity {
         if (this.ammoType === AmmoType.Basic || this.ammoType === AmmoType.Dual) {
             const bulletDirection = perpendicularDirection(this.facing);
             const newPosition = getPositionInDirection(this.position, bulletDirection);
-            const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
-            this.gameWorld.addEntity(bullet);
+            if (this.gameWorld.isPositionEmpty(newPosition, Enemy)) {
+                const bullet = new Bullet(this.position, this.gameWorld, bulletDirection, this);
+                this.gameWorld.addEntity(bullet);
+            }
         }
 
         if (this.ammoType === AmmoType.Dual) {
             const bulletDirection = reversePerpendicularDirection(this.facing);
             const newPosition = getPositionInDirection(this.position, bulletDirection);
-            const bullet = new Bullet(newPosition, this.gameWorld, bulletDirection);
-            this.gameWorld.addEntity(bullet);
+            if (this.gameWorld.isPositionEmpty(newPosition, Enemy)) {
+                const bullet = new Bullet(this.position, this.gameWorld, bulletDirection, this);
+                this.gameWorld.addEntity(bullet);
+            }
         }
     }
 
@@ -111,6 +115,8 @@ export class Segment extends Entity {
 
 export class Player extends Segment {
     otherSegments: Segment[];
+    timeSinceBullet = 0;
+    timePerBullet = 1000;
 
     constructor(position: Position, gameWorld: GameWorld, facing: Direction) {
         super(position, gameWorld, facing, AmmoType.None);
@@ -121,6 +127,19 @@ export class Player extends Segment {
     die() {
         this.gameWorld.setGameState("isPaused", true);
         this.gameWorld.setGameState("dead", true);
+    }
+
+    think(dt: number): void {
+        this.timeSinceBullet += dt;
+        if (this.timeSinceBullet > this.timePerBullet) {
+            this.timeSinceBullet = 0;
+
+            this.otherSegments.forEach((segment, index) => {
+                if (segment.segmentType !== SegmentType.Tail) {
+                    segment.fireBulletAfter = index * 3;
+                }
+            });
+        }
     }
     addSegment(upgradeType?: UpgradeType) {
         let lastSegment;

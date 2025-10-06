@@ -9,7 +9,6 @@ import { addPositions, Direction, getPositionInDirection, getRandomDirection } f
 import { ClosedDoor } from "./entities/door";
 import { WingedEnemy } from "./entities/wingedenemy";
 import { Pickup } from "./entities/pickup";
-import { Enemy } from "./entities/enemy";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
@@ -168,10 +167,10 @@ export class GameWorld {
         }
         return entities;
     }
-    isPositionEmpty(position: Position) {
+    isPositionEmpty(position: Position, except?: new (...args: any) => any) {
         const entitiesAtPos = this.getEntitiesAt(position);
         for (const entity of entitiesAtPos.values()) {
-            if (!(entity instanceof TileEntity)) {
+            if (!(entity instanceof TileEntity) && !(except ? entity instanceof except : false)) {
                 return false;
             }
         }
