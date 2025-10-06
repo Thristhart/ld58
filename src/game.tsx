@@ -126,7 +126,9 @@ function PauseDialog(props: PauseDialogProps) {
                 <p>collect and eat delicious eggs to regrow your flesh</p>
                 <p>eat enemies but avoid letting them hit you</p>
                 <p>don't run into yourself</p>
-                <button onClick={props.unpause}>let's go</button>
+                <button autoFocus onClick={props.unpause}>
+                    let's go
+                </button>
             </section>
         </dialog>
     );
