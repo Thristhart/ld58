@@ -1,3 +1,5 @@
 node_modules
 assets/rawsounds
 .DS_Store
+sounds/raw/*
+assets/sounds/conta*

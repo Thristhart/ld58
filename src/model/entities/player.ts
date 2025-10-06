@@ -26,7 +26,7 @@ import { Bullet } from "./bullet";
 import { Enemy } from "./enemy";
 import { Upgrade, UpgradeType } from "./upgrade";
 import { Wall } from "./wall";
-import { bgm } from "#src/audio.ts";
+import { bgm, chomp, cuteAnimalDie } from "#src/audio.ts";
 const headImage = loadImage(headImageUrl);
 const segmentStraightImage = loadImage(segmentStraightImageUrl);
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
@@ -210,6 +210,8 @@ export class Player extends Segment {
             } else if (entity instanceof Enemy) {
                 // eating you
                 entity.die();
+                chomp();
+                cuteAnimalDie();
                 this.addSegment();
             } else if (entity instanceof Segment || entity instanceof Wall) {
                 if (!(entity === this.gameWorld.player.otherSegments.at(-1))) {
