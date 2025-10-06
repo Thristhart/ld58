@@ -1,4 +1,5 @@
 import wingedEnemyUrl from "#src/assets/salamander_food.png";
+import { chomp } from "#src/audio.ts";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 import { arePositionsEqual, getPositionInDirection, getRandomDirection, reverseDirection } from "#src/direction.ts";
 import { loadImage } from "#src/images.ts";
@@ -26,6 +27,7 @@ export class WingedEnemy extends Enemy {
                     // they're eating me
                     if (arePositionsEqual(this.position, getPositionInDirection(entity.position, entity.facing))) {
                         this.die();
+                        chomp();
                         (entity as Player).addSegment();
                         return;
                     } else {

@@ -5,6 +5,7 @@ import { loadImage } from "#src/images.ts";
 import pickupImageUrl from "#src/assets/egg.png";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 import { ClosedDoor } from "./door";
+import { chomp } from "#src/audio.ts";
 const pickupImage = loadImage(pickupImageUrl);
 
 export class Pickup extends Entity {
@@ -29,6 +30,8 @@ export class Pickup extends Entity {
             const newCopy = new Pickup(newPos, this.gameWorld);
             this.gameWorld.addEntity(newCopy);
         }
+
+        chomp();
     }
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         context.drawImage(
