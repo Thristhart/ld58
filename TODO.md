@@ -18,4 +18,4 @@ Ship blockers:
 
 Nice to have:
 
-[ ] minimap??
+[x] minimap??

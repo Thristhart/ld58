@@ -4,7 +4,7 @@ import { Canvas } from "./canvas";
 import "./game.css";
 import { bufferedMoves, lastHandledMove, tick } from "./gameloop";
 import { imageLoadPromise } from "./images";
-import { Interface } from "./Interface/Interface";
+import { LeftInterface, RightInterface } from "./Interface/Interface";
 import { levelLoadPromise, levels } from "./levels/loadlevel";
 import { GrassTile } from "./model/entities/grasstile";
 import { Player } from "./model/entities/player";
@@ -121,12 +121,13 @@ function GameLoaded() {
     const isPaused = getGameState("isPaused");
     return (
         <>
-            <Interface getGameState={getGameState} setGameState={setGameState} />
+            <LeftInterface gameWorld={gameWorld} getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
                 {isDead && <DeathDialog restart={restart} />}
                 {!isDead && isPaused && <PauseDialog unpause={() => setGameState("isPaused", false)} />}
                 <Canvas gameWorld={gameWorld} />
             </div>
+            <RightInterface gameWorld={gameWorld} getGameState={getGameState} setGameState={setGameState} />
         </>
     );
 }

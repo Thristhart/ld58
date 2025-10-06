@@ -12,7 +12,7 @@ import { Pickup } from "./entities/pickup";
 
 type PositionString = `${number},${number}`;
 export class GameWorld {
-    private entities: Map<PositionString, Set<Entity>>;
+    public entities: Map<PositionString, Set<Entity>>;
     public player!: Player;
     private gameState: GameState = cloneDeep(defaultGameState);
     private stateChangeSubscriptions = new Map<string, Set<() => void>>();

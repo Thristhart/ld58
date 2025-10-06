@@ -24,7 +24,6 @@ button {
 }
 
 .CanvasContainer {
-    width:calc(100% - 500px);
     position: relative;
 }
 .CanvasContainer dialog {

@@ -1,19 +1,17 @@
-import { arePositionsEqual, getPositionInDirection, getRandomDirection, reverseDirection } from "#src/direction.ts";
-import { Enemy } from "./enemy";
-import { Wall } from "./wall";
-import { loadImage } from "#src/images.ts";
-
 import wingedEnemyUrl from "#src/assets/salamander_food.png";
-import { drawRotatedImage } from "#src/drawRotatedImage.ts";
-import { Player, Segment } from "./player";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
-import { OpenDoor } from "./door";
+import { arePositionsEqual, getPositionInDirection, getRandomDirection, reverseDirection } from "#src/direction.ts";
+import { loadImage } from "#src/images.ts";
 import { Bullet } from "./bullet";
+import { OpenDoor } from "./door";
+import { Enemy } from "./enemy";
+import { Player, Segment } from "./player";
+import { Wall } from "./wall";
 const wingedEnemyImage = loadImage(wingedEnemyUrl);
 
 export class WingedEnemy extends Enemy {
     timeSinceMove = 0;
-    timePerMove = 200;
+    timePerMove = 400;
 
     moveForward() {
         const nextPosition = getPositionInDirection(this.position, this.facing);
