@@ -2,7 +2,7 @@ import { Player } from "./player";
 import { Entity } from "../entity";
 import { loadImage } from "#src/images.ts";
 
-import pickupImageUrl from "#src/assets/pickup.png";
+import pickupImageUrl from "#src/assets/egg.png";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 import { ClosedDoor } from "./door";
 const pickupImage = loadImage(pickupImageUrl);
