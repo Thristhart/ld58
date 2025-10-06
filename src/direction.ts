@@ -13,6 +13,10 @@ export enum RelativeDirection {
     Backwards,
 }
 
+export function arePositionsEqual(a: Position, b: Position) {
+    return a.x === b.x && a.y === b.y;
+}
+
 export function getPositionInDirection(position: Position, direction: Direction) {
     switch (direction) {
         case Direction.North:

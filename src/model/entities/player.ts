@@ -1,6 +1,7 @@
 import { loadImage } from "#src/images.ts";
 import { Entity, Position } from "../entity";
 import {
+    arePositionsEqual,
     Direction,
     getDirectionBetweenTwoPositions,
     getPositionInDirection,
@@ -131,16 +132,15 @@ export class Player extends Segment {
     }
 
     think(dt: number): void {
-        this.timeSinceBullet += dt;
-        if (this.timeSinceBullet > this.timePerBullet) {
-            this.timeSinceBullet = 0;
-
-            this.otherSegments.forEach((segment, index) => {
-                if (segment.segmentType !== SegmentType.Tail) {
-                    segment.fireBulletAfter = index * 3;
-                }
-            });
-        }
+        // this.timeSinceBullet += dt;
+        // if (this.timeSinceBullet > this.timePerBullet) {
+        //     this.timeSinceBullet = 0;
+        //     this.otherSegments.forEach((segment, index) => {
+        //         if (segment.segmentType !== SegmentType.Tail) {
+        //             segment.fireBulletAfter = index * 3;
+        //         }
+        //     });
+        // }
     }
     addSegment(upgradeType?: UpgradeType) {
         let lastSegment;
@@ -173,7 +173,9 @@ export class Player extends Segment {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
             } else if (entity instanceof Enemy) {
-                this.die();
+                // eating you
+                entity.die();
+                this.addSegment();
             } else if (entity instanceof Segment || entity instanceof Wall) {
                 if (!(entity === this.gameWorld.player.otherSegments.at(-1))) {
                     if (this.gameWorld.getGameState("dying") || this.facing !== direction) {

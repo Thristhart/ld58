@@ -1,11 +1,11 @@
-import { getPositionInDirection, getRandomDirection, reverseDirection } from "#src/direction.ts";
+import { arePositionsEqual, getPositionInDirection, getRandomDirection, reverseDirection } from "#src/direction.ts";
 import { Enemy } from "./enemy";
 import { Wall } from "./wall";
 import { loadImage } from "#src/images.ts";
 
 import wingedEnemyUrl from "#src/assets/wingedenemy.png";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
-import { Segment } from "./player";
+import { Player, Segment } from "./player";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
 import { OpenDoor } from "./door";
 import { Bullet } from "./bullet";
@@ -24,7 +24,19 @@ export class WingedEnemy extends Enemy {
                 return;
             }
             if (entity instanceof Segment) {
-                entity.die();
+                if (entity.segmentType === "Head") {
+                    // they're eating me
+                    if (arePositionsEqual(this.position, getPositionInDirection(entity.position, entity.facing))) {
+                        this.die();
+                        (entity as Player).addSegment();
+                        return;
+                    } else {
+                        // bonk
+                        entity.die();
+                    }
+                } else {
+                    entity.die();
+                }
             }
             if (entity instanceof Bullet) {
                 this.die();
