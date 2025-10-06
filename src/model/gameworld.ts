@@ -125,6 +125,16 @@ export class GameWorld {
         return undefined;
     }
 
+    public getRoomsContainingPosition(position: Position) {
+        const rooms: RoomInstance[] = [];
+        for (const room of this.rooms) {
+            if (room.containsPoint(position)) {
+                rooms.push(room);
+            }
+        }
+        return rooms;
+    }
+
     public getEmptyPositionNear(position: Position) {
         if (this.isPositionEmpty(position)) {
             return position;
