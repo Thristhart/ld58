@@ -77,6 +77,24 @@ function useGameWorld() {
         return () => cancelAnimationFrame(frameHandle);
     }, [gameWorld]);
 
+    useEffect(() => {
+        function onBlur() {
+            gameWorld.setGameState("isPaused", true);
+        }
+        function onKeyDown(e: KeyboardEvent) {
+            if (e.key === " " || e.key === "Escape") {
+                gameWorld.setGameState("isPaused", true);
+            }
+        }
+
+        document.body.addEventListener("keydown", onKeyDown);
+        window.addEventListener("blur", onBlur);
+        return () => {
+            window.removeEventListener("blur", onBlur);
+            document.body.removeEventListener("keydown", onKeyDown);
+        };
+    }, [gameWorld]);
+
     return { gameWorld, getGameState, setGameState, restart };
 }
 
@@ -109,7 +127,7 @@ function DeathDialog(props: DeathDialogProps) {
                 <h2>Game Over</h2>
                 <StatsPage getGameState={props.getGameState}/>
                 <p>Try again?</p>
-                <button onClick={props.restart} autoFocus>
+                <button onClick={props.restart} autoFocus style={{ width: "130px" }}>
                     Retry
                 </button>
             </section>
@@ -128,7 +146,7 @@ function PauseDialog(props: PauseDialogProps) {
                 <p>collect and eat delicious eggs to regrow your flesh</p>
                 <p>eat enemies but avoid letting them hit you</p>
                 <p>don't run into yourself</p>
-                <button autoFocus onClick={props.unpause}>
+                <button autoFocus onClick={props.unpause} style={{ width: "130px" }}>
                     let's go
                 </button>
             </section>
