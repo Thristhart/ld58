@@ -10,7 +10,7 @@ body {
 }
 button {
     font-family: inherit;
-    background-image: url(/ld58/src/assets/stone_button_bg.png);
+    background-image: url(./assets/stone_button_bg.png);
     background-size: 100%;
     background-repeat: no-repeat;
     background-color: transparent;
