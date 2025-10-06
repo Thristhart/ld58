@@ -197,6 +197,12 @@ export class Player extends Segment {
         this.otherSegments.push(newSegment);
         this.gameWorld.addEntity(newSegment);
         newSegment.segmentType = SegmentType.Tail;
+
+        this.gameWorld.setGameState("currentLength", this.otherSegments.length + 1);
+        this.gameWorld.setGameState(
+            "maxLength",
+            Math.max(this.otherSegments.length + 1, this.gameWorld.getGameState("maxLength"))
+        );
     }
     tryMove(direction: Direction) {
         let isMovingRooms = false;
@@ -207,6 +213,7 @@ export class Player extends Segment {
             if (entity instanceof Pickup) {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
+                this.gameWorld.setGameState("eggsEaten", this.gameWorld.getGameState("eggsEaten") + 1);
             } else if (entity instanceof Upgrade) {
                 entity.consume(this);
                 this.gameWorld.removeEntity(entity);
@@ -216,6 +223,7 @@ export class Player extends Segment {
                 chomp();
                 cuteAnimalDie();
                 this.addSegment();
+                this.gameWorld.setGameState("enemiesEaten", this.gameWorld.getGameState("enemiesEaten") + 1);
             } else if (entity instanceof Segment || entity instanceof Wall) {
                 if (!(entity === this.gameWorld.player.otherSegments.at(-1))) {
                     if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
@@ -270,6 +278,7 @@ export class Player extends Segment {
         if (this.gameWorld.getGameState("dead")) {
             throw 322;
         }
+        this.gameWorld.setGameState("distanceTravelled", this.gameWorld.getGameState("distanceTravelled") + 1);
         return isMovingRooms;
     }
 }

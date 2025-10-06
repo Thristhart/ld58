@@ -30,6 +30,7 @@ export class WingedEnemy extends Enemy {
                         chomp();
                         cuteAnimalDie();
                         (entity as Player).addSegment();
+                        this.gameWorld.setGameState("enemiesEaten", this.gameWorld.getGameState("enemiesEaten") + 1);
                         return;
                     } else {
                         // bonk

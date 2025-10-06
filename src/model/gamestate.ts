@@ -7,6 +7,11 @@ export interface GameState {
     dead: boolean;
     gameSpeed: number;
     roomsVisited: Set<number>;
+    maxLength: number;
+    currentLength: number;
+    enemiesEaten: number;
+    eggsEaten: number;
+    distanceTravelled: number;
 
     timeSinceCameraPositionChange: number;
 
@@ -27,6 +32,11 @@ export const defaultGameState: GameState = {
     gameSpeed: 1,
     roomsVisited: new Set<number>(),
     timeSinceCameraPositionChange: 0,
+    maxLength: 2,
+    currentLength: 2,
+    enemiesEaten: 0,
+    eggsEaten: 0,
+    distanceTravelled: 0,
 
     timePerAutomove: 200,
 

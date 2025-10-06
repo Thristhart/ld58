@@ -4,6 +4,7 @@ import { tickFrame } from "../render";
 import { TileType } from "../model/room";
 import { ClosedDoor } from "../model/entities/door";
 import { Segment } from "../model/entities/player";
+import { Wall } from "../model/entities/wall";
 
 function useFitCanvasToContainer(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     useEffect(() => {
@@ -64,11 +65,11 @@ function drawMinimap(dt: number, canvas: HTMLCanvasElement, context: CanvasRende
         if (!vistedRooms.has(room.id)) {
             return;
         }
-        room.definition.locations.forEach((type, position) => {
-            if (type === TileType.Wall) {
+        gameWorld.getEntitiesInRoom(room).forEach((entity) => {
+            if (entity instanceof Wall) {
                 context.fillRect(
-                    (room.position.x + position.x) * MINIMAP_GRID_SQUARE_SIZE,
-                    (room.position.y + position.y) * MINIMAP_GRID_SQUARE_SIZE,
+                    (entity.position.x) * MINIMAP_GRID_SQUARE_SIZE,
+                    (entity.position.y) * MINIMAP_GRID_SQUARE_SIZE,
                     MINIMAP_GRID_SQUARE_SIZE,
                     MINIMAP_GRID_SQUARE_SIZE
                 );

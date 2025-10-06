@@ -80,14 +80,34 @@ function useGameWorld() {
     return { gameWorld, getGameState, setGameState, restart };
 }
 
+interface StatsPageProps {
+    getGameState: <K extends keyof GameState>(key: K) => GameState[K];
+}
+
+function StatsPage(props: StatsPageProps) {
+    return (<div>
+        <div>
+            Rooms Entered: {props.getGameState("roomsVisited").size} <br />
+            Max Length: {props.getGameState("maxLength")} <br />
+            Final Length: {props.getGameState("currentLength")} <br />
+            Enemies Killed: {props.getGameState("enemiesEaten")} <br />
+            Eggs Eaten: {props.getGameState("eggsEaten")} <br />
+            Distance Travelled: {props.getGameState("distanceTravelled")}
+        </div>
+    </div>
+    );
+}
+
 interface DeathDialogProps {
     restart: () => void;
+    getGameState: <K extends keyof GameState>(key: K) => GameState[K];
 }
 function DeathDialog(props: DeathDialogProps) {
     return (
         <dialog open>
             <section>
                 <h2>Game Over</h2>
+                <StatsPage getGameState={props.getGameState}/>
                 <p>Try again?</p>
                 <button onClick={props.restart} autoFocus>
                     Retry
@@ -124,7 +144,7 @@ function GameLoaded() {
         <>
             <LeftInterface gameWorld={gameWorld} getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
-                {isDead && <DeathDialog restart={restart} />}
+                {isDead && <DeathDialog restart={restart} getGameState={getGameState} />}
                 {!isDead && isPaused && (
                     <PauseDialog
                         unpause={() => {
