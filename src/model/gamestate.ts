@@ -22,7 +22,7 @@ export interface GameState {
 export const defaultGameState: GameState = {
     points: 0,
     dying: false,
-    isPaused: false,
+    isPaused: true,
     dead: false,
     gameSpeed: 1,
     roomsVisited: new Set<number>(),

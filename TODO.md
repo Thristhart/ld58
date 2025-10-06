@@ -6,7 +6,7 @@ Ship blockers:
 [x] Food should only spawn up to door requirement count
 [x] Door requirements should scale with number of rooms
 [x] Enemies should not spawn based on random poll, but instead spawn a specific number on random (enemyspawn) squares
-[ ] Intro should have instructions/tutorial
+[x] Intro should have instructions/tutorial
 [ ] Game over screen
 [ ] Name (or justify Snakman)
 [ ] Gain flesh over time?

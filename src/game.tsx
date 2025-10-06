@@ -115,13 +115,33 @@ function DeathDialog(props: DeathDialogProps) {
     );
 }
 
+interface PauseDialogProps {
+    unpause: () => void;
+}
+function PauseDialog(props: PauseDialogProps) {
+    return (
+        <dialog open>
+            <section>
+                <p>[w][a][s][d] or arrow keys to move</p>
+                <p>collect and eat delicious eggs to regrow your flesh</p>
+                <p>eat enemies but avoid letting them hit you</p>
+                <p>don't run into yourself</p>
+                <button onClick={props.unpause}>let's go</button>
+            </section>
+        </dialog>
+    );
+}
+
 function GameLoaded() {
     const { gameWorld, getGameState, setGameState, restart } = useGameWorld();
+    const isDead = getGameState("dead");
+    const isPaused = getGameState("isPaused");
     return (
         <>
             <Interface getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
-                {getGameState("dead") && <DeathDialog restart={restart} />}
+                {isDead && <DeathDialog restart={restart} />}
+                {!isDead && isPaused && <PauseDialog unpause={() => setGameState("isPaused", false)} />}
                 <Canvas gameWorld={gameWorld} />
             </div>
         </>
