@@ -1,5 +1,6 @@
 import { camera } from "./camera";
 import { GRID_SQUARE_SIZE } from "./constants";
+import { TileEntity } from "./model/entities/tile";
 import { GameWorld } from "./model/gameworld";
 import { lerp } from "./util";
 

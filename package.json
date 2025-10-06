@@ -27,6 +27,7 @@
         "vite-plugin-node-polyfills": "^0.23.0"
     },
     "dependencies": {
+        "@sentry/react": "^10.17.0",
         "classnames": "^2.5.1",
         "howler": "^2.2.4",
         "js-svg-path": "^1.1.0",
