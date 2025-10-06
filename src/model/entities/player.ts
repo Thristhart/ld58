@@ -127,6 +127,7 @@ export class Player extends Segment {
     die() {
         this.gameWorld.setGameState("isPaused", true);
         this.gameWorld.setGameState("dead", true);
+        throw 322;
     }
 
     think(dt: number): void {

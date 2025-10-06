@@ -8,7 +8,13 @@ export function tick(gameWorld: GameWorld, timestamp: number) {
     lastFrameTime = timestamp;
 
     if (!gameWorld.getGameState("isPaused") && gameWorld.getGameState("timeSinceCameraPositionChange") <= 0) {
-        advanceGame(gameWorld, dt * gameWorld.getGameState("gameSpeed"));
+        try {
+            advanceGame(gameWorld, dt * gameWorld.getGameState("gameSpeed"));
+        } catch (e) {
+            if (e !== 322) {
+                throw e;
+            }
+        }
     }
 }
 
