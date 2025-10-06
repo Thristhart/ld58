@@ -12,15 +12,13 @@ function useFitCanvasToWindow(canvasRef: React.RefObject<HTMLCanvasElement | nul
         }
         const canvas = canvasRef.current;
         const parentRect = canvas.parentElement?.getBoundingClientRect();
-        const smallestDimension = Math.min(parentRect?.width ?? 0, parentRect?.height ?? 0);
-        canvas.width = smallestDimension;
-        canvas.height = smallestDimension;
+        canvas.width = parentRect?.width || 0;
+        canvas.height = parentRect?.height || 0;
 
         const onResize = () => {
             const parentRect = canvas.parentElement?.getBoundingClientRect();
-            const smallestDimension = Math.min(parentRect?.width ?? 0, parentRect?.height ?? 0);
-            canvas.width = smallestDimension;
-            canvas.height = smallestDimension;
+            canvas.width = parentRect?.width || 0;
+            canvas.height = parentRect?.height || 0;
         };
         window.addEventListener("resize", onResize, { passive: true });
         return () => {

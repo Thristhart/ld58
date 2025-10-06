@@ -14,7 +14,7 @@ Ship blockers:
 [x] Use Tan's images
 [x] Fix inaccessible doors
 [ ] sounds
-[ ] music
+[x] music
 
 Nice to have:
 

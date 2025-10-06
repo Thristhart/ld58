@@ -2,6 +2,7 @@ import { Minimap } from "#src/Interface/minimap.tsx";
 import { GameState } from "#src/model/gamestate.ts";
 import { GameWorld } from "#src/model/gameworld.ts";
 import "./Interface.css";
+import { MuteButton } from "./mutebutton";
 
 export function LeftInterface(props: {
     gameWorld: GameWorld;
@@ -23,7 +24,11 @@ export function RightInterface(props: {
     getGameState: <K extends keyof GameState>(key: K) => GameState[K];
     setGameState: (property: keyof GameState, value: GameState[keyof GameState]) => void;
 }) {
-    return <div className="RightInterface"></div>;
+    return (
+        <div className="RightInterface">
+            <MuteButton />
+        </div>
+    );
 }
 
 export function Points(props: {

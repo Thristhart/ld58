@@ -26,6 +26,7 @@ import { Bullet } from "./bullet";
 import { Enemy } from "./enemy";
 import { Upgrade, UpgradeType } from "./upgrade";
 import { Wall } from "./wall";
+import { bgm } from "#src/audio.ts";
 const headImage = loadImage(headImageUrl);
 const segmentStraightImage = loadImage(segmentStraightImageUrl);
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
@@ -161,6 +162,7 @@ export class Player extends Segment {
     die() {
         this.gameWorld.setGameState("isPaused", true);
         this.gameWorld.setGameState("dead", true);
+        bgm.stop();
     }
 
     think(dt: number): void {

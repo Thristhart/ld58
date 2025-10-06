@@ -10,6 +10,7 @@ import { GrassTile } from "./model/entities/grasstile";
 import { Player } from "./model/entities/player";
 import { GameState } from "./model/gamestate";
 import { GameWorld } from "./model/gameworld";
+import { bgm } from "./audio";
 
 function createGameWorld() {
     const gameWorld = new GameWorld();
@@ -124,7 +125,16 @@ function GameLoaded() {
             <LeftInterface gameWorld={gameWorld} getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
                 {isDead && <DeathDialog restart={restart} />}
-                {!isDead && isPaused && <PauseDialog unpause={() => setGameState("isPaused", false)} />}
+                {!isDead && isPaused && (
+                    <PauseDialog
+                        unpause={() => {
+                            setGameState("isPaused", false);
+                            if (!bgm.playing()) {
+                                bgm.play();
+                            }
+                        }}
+                    />
+                )}
                 <Canvas gameWorld={gameWorld} />
             </div>
             <RightInterface gameWorld={gameWorld} getGameState={getGameState} setGameState={setGameState} />

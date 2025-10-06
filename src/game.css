@@ -24,7 +24,11 @@ button {
 }
 
 .CanvasContainer {
-    position: relative;
+    position: absolute;
+    inset: 0;
+}
+.CanvasContainer canvas {
+    height: 100%;
 }
 .CanvasContainer dialog {
     top: 32px;

@@ -1,0 +1,7 @@
+.MuteButton {
+    position: absolute;
+    inset-inline-end: 0;
+    border: none;
+    background: transparent;
+    font-size: 28px;;
+}

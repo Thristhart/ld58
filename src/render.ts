@@ -21,6 +21,8 @@ export function tickFrame(
     drawFrame(dt * gameWorld.getGameState("gameSpeed"), canvas, context, gameWorld);
 }
 
+let previousMarginSize: number | undefined;
+
 function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, gameWorld: GameWorld) {
     frameDurations[frameTimeIndex++] = dt;
     frameTimeIndex %= frameDurationsSampleCount;
@@ -57,6 +59,15 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
         }
     }
 
+    if (currentRoom) {
+        const visibleWidth = currentRoom.definition.width * GRID_SQUARE_SIZE * camera.scale;
+        const marginSize = canvas.width / 2 - visibleWidth / 2;
+        if (previousMarginSize !== marginSize) {
+            document.body.style.setProperty("--marginSize", `${marginSize}px`);
+            previousMarginSize = marginSize;
+        }
+    }
+
     let cameraScale = camera.scale;
     let cameraX = camera.x;
     let cameraY = camera.y;
@@ -83,13 +94,13 @@ function drawFrame(dt: number, canvas: HTMLCanvasElement, context: CanvasRenderi
     } else {
         const cameraGridX = Math.floor(cameraX / GRID_SQUARE_SIZE);
         const cameraGridY = Math.floor(cameraY / GRID_SQUARE_SIZE);
-        const halfWisibleWidth = Math.ceil(canvas.width / cameraScale / GRID_SQUARE_SIZE / 2);
+        const halfVisibleWidth = Math.ceil(canvas.width / cameraScale / GRID_SQUARE_SIZE / 2);
         const halfVisibleHeight = Math.ceil(canvas.height / cameraScale / GRID_SQUARE_SIZE / 2);
 
         const visibleBounds = {
-            x: cameraGridX - halfWisibleWidth - 1,
+            x: cameraGridX - halfVisibleWidth - 1,
             y: cameraGridY - halfVisibleHeight - 1,
-            w: halfWisibleWidth * 2 + 1,
+            w: halfVisibleWidth * 2 + 1,
             h: halfVisibleHeight * 2 + 1,
         };
         visibleEntities = gameWorld.getEntitiesInArea(visibleBounds);
