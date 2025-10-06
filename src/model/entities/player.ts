@@ -26,7 +26,7 @@ import { Bullet } from "./bullet";
 import { Enemy } from "./enemy";
 import { Upgrade, UpgradeType } from "./upgrade";
 import { Wall } from "./wall";
-import { bgm, chomp, cuteAnimalDie } from "#src/audio.ts";
+import { bgm, bonkSound, chomp, cuteAnimalDie } from "#src/audio.ts";
 const headImage = loadImage(headImageUrl);
 const segmentStraightImage = loadImage(segmentStraightImageUrl);
 const segmentCurveImage = loadImage(segmentCurveImageUrl);
@@ -220,6 +220,7 @@ export class Player extends Segment {
                 if (!(entity === this.gameWorld.player.otherSegments.at(-1))) {
                     if (this.gameWorld.getGameState("dying") || this.facing !== direction) {
                         this.die();
+                        bonkSound();
                     } else {
                         this.gameWorld.setGameState("dying", true);
                         return isMovingRooms;
