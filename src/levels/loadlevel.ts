@@ -34,23 +34,22 @@ import zoo from ".zoo.png";
 
 
 export const levelLoadPromise = Promise.all([
-    import basic from ".basic.png";
-import basketball from ".basketball.png";
-import boxes1 from ".boxes1.png";
-import boxes2 from ".boxes2.png";
-import c_shape from ".c_shape.png";
-import canyon_1 from ".canyon_1.png";
-import corners_in from ".corners_in.png";
-import corners_mixes from ".corners_mixes.png";
-import corners_out from ".corners_out.png";
-import corners_up from ".corners_up.png";
-import cubbies from ".cubbies.png";
-import equalsmore from ".equalsmore.png";
-import letmein from ".letmein.png";
-import LL from ".LL.png";
-import plus from ".plus.png";
-import zoo from ".zoo.png";
-    
+    loadLevel("basic", loadImage(basic)),
+    loadLevel("basketball", loadImage(basketball)),
+    loadLevel("boxes1", loadImage(boxes1)),
+    loadLevel("boxes2", loadImage(boxes2)),
+    loadLevel("c_shape", loadImage(c_shape)),
+    loadLevel("canyon_1", loadImage(canyon_1)),
+    loadLevel("corners_in", loadImage(corners_in)),
+    loadLevel("corners_mixes", loadImage(corners_mixes)),
+    loadLevel("corners_out", loadImage(corners_out)),
+    loadLevel("corners_up", loadImage(corners_up)),
+    loadLevel("cubbies", loadImage(cubbies)),
+    loadLevel("equalsmore", loadImage(equalsmore)),
+    loadLevel("letmein", loadImage(letmein)),
+    loadLevel("LL", loadImage(LL)),
+    loadLevel("plus", loadImage(plus)),
+    loadLevel("zoo", loadImage(zoo))
 ]);
 export const levels: Record<string, RoomDefinition> = {};
 

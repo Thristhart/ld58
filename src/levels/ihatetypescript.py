@@ -10,7 +10,7 @@ importlines=[]
 exportlines=[]
 for level in every_levelname:
     importlines += importline.format(lname=level)
-    exportlines += importline.format(lname=level)
+    exportlines += exportline.format(lname=level)
 
 
 print("the importlines\n")
