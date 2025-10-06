@@ -12,7 +12,7 @@ Ship blockers:
 [x] Gain flesh over time?
 [x] Door num visuals
 [x] Use Tan's images
-[ ] Fix inaccessible doors
+[x] Fix inaccessible doors
 [ ] sounds
 [ ] music
 

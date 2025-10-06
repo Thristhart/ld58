@@ -264,7 +264,11 @@ export class GameWorld {
 
         const chosenTile = emptyFoodSpawnTiles[Math.floor(Math.random() * emptyFoodSpawnTiles.length)][0];
 
-        return addPositions(currentRoom.position, chosenTile);
+        if (currentRoom.position !== undefined) {
+            return addPositions(currentRoom.position, chosenTile);
+        } else {
+            return this.getRandomEmptyPositionNearPlayer();
+        }
     }
 
     private cleanEntities() {
