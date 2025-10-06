@@ -25,7 +25,7 @@ export class Pickup extends Entity {
 
         const pickups = this.gameWorld.getEntitiesInRoom(currentRoom).filter((x) => x instanceof Pickup);
         let maximumSizePossibleCurrently = this.gameWorld.player.otherSegments.length + pickups.length;
-        if (maximumSizePossibleCurrently <= biggestDoor) {
+        if (maximumSizePossibleCurrently <= biggestDoor + 1) {
             const newCopy = new Pickup(newPos, this.gameWorld);
             this.gameWorld.addEntity(newCopy);
         }

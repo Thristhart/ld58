@@ -13,6 +13,8 @@ Ship blockers:
 [x] Door num visuals
 [ ] Use Tan's images
 [ ] Fix inaccessible doors
+[ ] sounds
+[ ] music
 
 Nice to have:
 
