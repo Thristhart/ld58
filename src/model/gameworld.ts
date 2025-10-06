@@ -281,13 +281,13 @@ export class GameWorld {
 
     private getOpenDoorRequirement(numRoomsVisited: number) {
         if (numRoomsVisited < 3) {
-            return 8 + numRoomsVisited;
+            return 8 + Math.floor(numRoomsVisited * 5);
         } else if (numRoomsVisited < 8) {
-            return 8 + Math.floor(numRoomsVisited * 1.5);
+            return 8 + Math.floor(numRoomsVisited * 8);
         } else if (numRoomsVisited < 13) {
-            return 8 + Math.floor(numRoomsVisited * 2);
+            return 8 + Math.floor(numRoomsVisited * 11);
         }
-        return 8 + Math.floor(numRoomsVisited * 3);
+        return 8 + Math.floor(numRoomsVisited * 15);
     }
 
     static isPointWithinBox(point: Position, box: { x: number; y: number; w: number; h: number }) {
