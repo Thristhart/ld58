@@ -1,7 +1,4 @@
-import { loadImage } from "#src/images.ts";
-import { Entity, Position } from "../entity";
 import {
-    arePositionsEqual,
     Direction,
     getDirectionBetweenTwoPositions,
     getPositionInDirection,
@@ -11,23 +8,32 @@ import {
     reverseDirection,
     reversePerpendicularDirection,
 } from "#src/direction.ts";
-import { GameWorld } from "../gameworld";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
+import { loadImage } from "#src/images.ts";
+import { Entity, Position } from "../entity";
+import { GameWorld } from "../gameworld";
 import { Pickup } from "./pickup";
 
 import headImageUrl from "#src/assets/snake/head.png";
-const headImage = loadImage(headImageUrl);
-import segmentStraightImageUrl from "#src/assets/snake/segment_straight.png";
-const segmentStraightImage = loadImage(segmentStraightImageUrl);
 import segmentCurveImageUrl from "#src/assets/snake/segment_curve.png";
-const segmentCurveImage = loadImage(segmentCurveImageUrl);
+import segmentStraightImageUrl from "#src/assets/snake/segment_straight.png";
 import segmentTailImageUrl from "#src/assets/snake/tail.png";
-import { Wall } from "./wall";
-import { Buzzsaw } from "./buzzsaw";
+import fleshHeadImageUrl from "#src/assets/snake/flesh_head.png";
+import fleshSegmentCurveImageUrl from "#src/assets/snake/flesh_segment_curve.png";
+import fleshSegmentStraightImageUrl from "#src/assets/snake/flesh_segment_straight.png";
+import fleshSegmentTailImageUrl from "#src/assets/snake/flesh_tail.png";
 import { Bullet } from "./bullet";
-import { Upgrade, UpgradeType } from "./upgrade";
 import { Enemy } from "./enemy";
+import { Upgrade, UpgradeType } from "./upgrade";
+import { Wall } from "./wall";
+const headImage = loadImage(headImageUrl);
+const segmentStraightImage = loadImage(segmentStraightImageUrl);
+const segmentCurveImage = loadImage(segmentCurveImageUrl);
 const segmentTailImage = loadImage(segmentTailImageUrl);
+const fleshHeadImage = loadImage(fleshHeadImageUrl);
+const fleshSegmentCurveImage = loadImage(fleshSegmentCurveImageUrl);
+const fleshSegmentStraightImage = loadImage(fleshSegmentStraightImageUrl);
+const fleshSegmentTailImage = loadImage(fleshSegmentTailImageUrl);
 
 enum AmmoType {
     None = "None",
@@ -43,6 +49,7 @@ enum SegmentType {
     Tail = "Tail",
 }
 export class Segment extends Entity {
+    parent: Player | undefined;
     segmentType: SegmentType = SegmentType.Straight;
     ammoType: AmmoType = AmmoType.Basic;
     fireBulletAfter = 0;
@@ -56,7 +63,8 @@ export class Segment extends Entity {
         // a segment died... disconnect everything behind it
         const myIndexInPlayer = this.gameWorld.player.otherSegments.indexOf(this);
         if (myIndexInPlayer != -1) {
-            this.gameWorld.player.otherSegments.splice(myIndexInPlayer);
+            const disconnected = this.gameWorld.player.otherSegments.splice(myIndexInPlayer);
+            disconnected.forEach((segment) => (segment.parent = undefined));
         }
         this.gameWorld.removeEntity(this);
     }
@@ -93,11 +101,26 @@ export class Segment extends Entity {
     }
 
     draw(context: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
+        let segmentCountForFlesh = this.parent?.otherSegments.length ?? 0;
+
+        const fleshPercentage = Math.min(1, Math.max(segmentCountForFlesh - 25, 0) / 10);
         if (this.segmentType === SegmentType.Head) {
+            context.globalAlpha = fleshPercentage;
+            drawRotatedImage(context, fleshHeadImage.bitmap, this.position, (Math.PI / 2) * this.facing);
+
+            context.globalAlpha = 1 - fleshPercentage;
             drawRotatedImage(context, headImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         } else if (this.segmentType === SegmentType.Straight) {
+            context.globalAlpha = fleshPercentage;
+            drawRotatedImage(context, fleshSegmentStraightImage.bitmap, this.position, (Math.PI / 2) * this.facing);
+
+            context.globalAlpha = 1 - fleshPercentage;
             drawRotatedImage(context, segmentStraightImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         } else if (this.segmentType === SegmentType.LeftCurve) {
+            context.globalAlpha = fleshPercentage;
+            drawRotatedImage(context, fleshSegmentCurveImage.bitmap, this.position, (Math.PI / 2) * (this.facing - 1));
+
+            context.globalAlpha = 1 - fleshPercentage;
             drawRotatedImage(context, segmentCurveImage.bitmap, this.position, (Math.PI / 2) * (this.facing - 1));
         } else if (this.segmentType === SegmentType.RightCurve) {
             let direction = this.facing - 1;
@@ -107,10 +130,19 @@ export class Segment extends Entity {
             if (this.facing === Direction.West) {
                 direction -= 2;
             }
+            context.globalAlpha = fleshPercentage;
+            drawRotatedImage(context, fleshSegmentCurveImage.bitmap, this.position, (Math.PI / 2) * direction, true);
+
+            context.globalAlpha = 1 - fleshPercentage;
             drawRotatedImage(context, segmentCurveImage.bitmap, this.position, (Math.PI / 2) * direction, true);
         } else if (this.segmentType === SegmentType.Tail) {
+            context.globalAlpha = fleshPercentage;
+            drawRotatedImage(context, fleshSegmentTailImage.bitmap, this.position, (Math.PI / 2) * this.facing);
+
+            context.globalAlpha = 1 - fleshPercentage;
             drawRotatedImage(context, segmentTailImage.bitmap, this.position, (Math.PI / 2) * this.facing);
         }
+        context.globalAlpha = 1;
     }
 }
 
@@ -123,6 +155,7 @@ export class Player extends Segment {
         super(position, gameWorld, facing, AmmoType.None);
         this.otherSegments = [];
         this.segmentType = SegmentType.Head;
+        this.parent = this;
     }
 
     die() {
@@ -156,6 +189,7 @@ export class Player extends Segment {
             ammoType = AmmoType.Dual;
         }
         const newSegment = new Segment(newPosition, this.gameWorld, lastSegment.facing, ammoType);
+        newSegment.parent = this;
         this.otherSegments.push(newSegment);
         this.gameWorld.addEntity(newSegment);
         newSegment.segmentType = SegmentType.Tail;
