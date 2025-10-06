@@ -9,9 +9,9 @@ Ship blockers:
 [x] Intro should have instructions/tutorial
 [ ] Game over screen
 [ ] Name (or justify Snakman)
-[ ] Gain flesh over time?
+[x] Gain flesh over time?
 [x] Door num visuals
-[ ] Use Tan's images
+[x] Use Tan's images
 [ ] Fix inaccessible doors
 [ ] sounds
 [ ] music
