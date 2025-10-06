@@ -5,6 +5,7 @@ export enum TileType {
     Door,
     FoodSpawn,
     EnemySpawn,
+    ForceEnemy,
 }
 
 export interface RoomDefinition {

@@ -42,6 +42,8 @@ function getTileTypeForColor(color: number) {
             return TileType.Door;
         case 0x0000ff:
             return TileType.FoodSpawn;
+        case 0xffff00:
+            return TileType.ForceEnemy;
         default:
             return undefined;
     }

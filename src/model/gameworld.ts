@@ -108,6 +108,11 @@ export class GameWorld {
             this.addEntity(enemy);
             numEnemiesToSpawn--;
         }
+        let forceEnemyTiles = [...room.definition.locations].filter(([k, v]) => v === TileType.ForceEnemy);
+        for (const tile of forceEnemyTiles) {
+            const enemy = new WingedEnemy(addPositions(position, tile[0]), this, Direction.North);
+            this.addEntity(enemy);
+        }
         return room;
     }
 
