@@ -3,7 +3,7 @@ import { Enemy } from "./enemy";
 import { Wall } from "./wall";
 import { loadImage } from "#src/images.ts";
 
-import wingedEnemyUrl from "#src/assets/wingedenemy.png";
+import wingedEnemyUrl from "#src/assets/salamander_food.png";
 import { drawRotatedImage } from "#src/drawRotatedImage.ts";
 import { Player, Segment } from "./player";
 import { GRID_SQUARE_SIZE } from "#src/constants.ts";
