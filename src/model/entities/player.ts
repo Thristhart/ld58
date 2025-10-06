@@ -128,7 +128,6 @@ export class Player extends Segment {
     die() {
         this.gameWorld.setGameState("isPaused", true);
         this.gameWorld.setGameState("dead", true);
-        throw 322;
     }
 
     think(dt: number): void {
@@ -222,6 +221,10 @@ export class Player extends Segment {
             const beforeTail = segments[segments.length - 2];
             tail.segmentType = SegmentType.Tail;
             tail.facing = beforeTail.facing;
+        }
+
+        if (this.gameWorld.getGameState("dead")) {
+            throw 322;
         }
     }
 }
