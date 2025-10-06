@@ -13,7 +13,7 @@ Ship blockers:
 [x] Door num visuals
 [x] Use Tan's images
 [x] Fix inaccessible doors
-[ ] sounds
+[x] sounds
 [x] music
 [ ] food does not spawn too close from the snake's head (3 tiles away) or other food (2 tiles away) so that food can spawn near doors when the snake has moved away from them and doesn't show up in big clumps
 

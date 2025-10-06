@@ -55,3 +55,10 @@ const leafCrunches = [
 export function leafCrunch() {
     leafCrunches[Math.floor(Math.random() * leafCrunches.length)].play();
 }
+
+import bonkUrl from "#src/assets/sounds/bonk.mp3";
+const bonk = new Howl({ src: bonkUrl });
+
+export function bonkSound() {
+    bonk.play();
+}
