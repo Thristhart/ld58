@@ -31,7 +31,6 @@ import LL from "./LL.png";
 import plus from "./plus.png";
 import zoo from "./zoo.png";
 
-
 export const levelLoadPromise = Promise.all([
     loadLevel("basic", loadImage(basic)),
     loadLevel("basketball", loadImage(basketball)),
@@ -48,7 +47,7 @@ export const levelLoadPromise = Promise.all([
     loadLevel("letmein", loadImage(letmein)),
     loadLevel("LL", loadImage(LL)),
     loadLevel("plus", loadImage(plus)),
-    loadLevel("zoo", loadImage(zoo))
+    loadLevel("zoo", loadImage(zoo)),
 ]);
 export const levels: Record<string, RoomDefinition> = {};
 

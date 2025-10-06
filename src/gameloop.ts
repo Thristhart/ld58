@@ -62,8 +62,12 @@ function advanceGame(gameWorld: GameWorld, dt: number) {
             nextFacing = undefined;
         }
         if (!ignoreNextAutomove) {
-            gameWorld.player.tryMove(nextFacing ?? gameWorld.player.facing);
-            autoMoveTimer = 0;
+            let isInANewRoom = gameWorld.player.tryMove(nextFacing ?? gameWorld.player.facing);
+            if (isInANewRoom) {
+                autoMoveTimer = -500;
+            } else {
+                autoMoveTimer = 0;
+            }
         }
         ignoreNextAutomove = false;
     }

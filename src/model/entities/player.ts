@@ -197,6 +197,7 @@ export class Player extends Segment {
         newSegment.segmentType = SegmentType.Tail;
     }
     tryMove(direction: Direction) {
+        let isMovingRooms = false;
         const nextPosition = getPositionInDirection(this.position, direction);
 
         const entitiesAtPos = this.gameWorld.getEntitiesAt(nextPosition);
@@ -219,7 +220,7 @@ export class Player extends Segment {
                         this.die();
                     } else {
                         this.gameWorld.setGameState("dying", true);
-                        return;
+                        return isMovingRooms;
                     }
                 }
             }
@@ -234,6 +235,7 @@ export class Player extends Segment {
         if (currentRoom?.id !== nextRoom?.id && nextRoom?.id !== undefined) {
             this.gameWorld.setGameState("roomsVisited", this.gameWorld.getGameState("roomsVisited").add(nextRoom.id));
             this.gameWorld.setGameState("currentRoom", nextRoom);
+            isMovingRooms = true;
         }
 
         const segments = [this, ...this.otherSegments];
@@ -264,5 +266,6 @@ export class Player extends Segment {
         if (this.gameWorld.getGameState("dead")) {
             throw 322;
         }
+        return isMovingRooms;
     }
 }
