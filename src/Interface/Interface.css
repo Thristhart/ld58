@@ -1,8 +1,21 @@
-.Interface {
-    width: 500px;
-    min-width: 500px;
-    background-color: rgb(150, 188, 201);
+.LeftInterface {
+    background-color: #082b38;
     z-index: 2;
-    padding: 16px;
+    padding: 0;
     box-sizing: border-box;
+    flex-grow: 1;
+    position: relative;
+}
+.RightInterface {
+    background-color: #082b38;
+    z-index: 2;
+    padding: 0;
+    box-sizing: border-box;
+    flex-grow: 1;
+    position: relative;
+}
+
+.MinimapContainer {
+    position: absolute;
+    inset: 16px;
 }

@@ -1,17 +1,29 @@
+import { Minimap } from "#src/Interface/minimap.tsx";
 import { GameState } from "#src/model/gamestate.ts";
+import { GameWorld } from "#src/model/gameworld.ts";
 import "./Interface.css";
 
-export function Interface(props: {
+export function LeftInterface(props: {
+    gameWorld: GameWorld;
     getGameState: <K extends keyof GameState>(key: K) => GameState[K];
     setGameState: (property: keyof GameState, value: GameState[keyof GameState]) => void;
 }) {
     return (
-        <div className="Interface">
-            THIS IS AN INTERFACE...SORTA
+        <div className="LeftInterface">
+            {/* THIS IS AN INTERFACE...SORTA
             <Points getGameState={props.getGameState} setGameState={props.setGameState} />
-            <GameSpeed getGameState={props.getGameState} setGameState={props.setGameState} />
+            <GameSpeed getGameState={props.getGameState} setGameState={props.setGameState} /> */}
+            <Minimap gameWorld={props.gameWorld} />
         </div>
     );
+}
+
+export function RightInterface(props: {
+    gameWorld: GameWorld;
+    getGameState: <K extends keyof GameState>(key: K) => GameState[K];
+    setGameState: (property: keyof GameState, value: GameState[keyof GameState]) => void;
+}) {
+    return <div className="RightInterface"></div>;
 }
 
 export function Points(props: {
