@@ -6,7 +6,12 @@ import { Direction } from "#src/direction.ts";
 
 /*
 TODO:
-zoo.png
+corners up
+corners out
+boxes1
+corners in
+corners mixed
+boxes 2
 */
 
 import basic from "./basic.png";
