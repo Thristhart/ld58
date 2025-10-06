@@ -13,7 +13,7 @@ export class Pickup extends Entity {
             consumer.addSegment();
         }
 
-        const newPos = this.gameWorld.getRandomEmptyPositionNearPlayer();
+        const newPos = this.gameWorld.getRandomEmptyFoodSpawnPositionNearPlayer();
         const currentRoom = this.gameWorld.getRoomContainingPosition(this.gameWorld.player.position)!;
         const doors = this.gameWorld.getEntitiesInRoom(currentRoom).filter((x) => x instanceof ClosedDoor);
         let biggestDoor = 0;

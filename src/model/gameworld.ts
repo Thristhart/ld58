@@ -177,6 +177,16 @@ export class GameWorld {
         return true;
     }
 
+    isPositionEmptyREAL(position: Position) {
+        const entitiesAtPos = this.getEntitiesAt(position);
+        for (const entity of entitiesAtPos.values()) {
+            if (!(entity instanceof TileEntity)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     getEntitiesAt(position: Position) {
         return this.entities.get(`${position.x},${position.y}`) ?? new Set();
     }
@@ -241,12 +251,14 @@ export class GameWorld {
 
     getRandomEmptyFoodSpawnPositionNearPlayer() {
         const currentRoom = this.getRoomContainingPosition(this.player.position)!;
-        let foodSpawnTiles = [...currentRoom.definition.locations].filter(([k, v]) => v === TileType.FoodSpawn);
+        const foodSpawnTiles = [...currentRoom.definition.locations].filter(([k, v]) => v === TileType.FoodSpawn);
+        const emptyFoodSpawnTiles = foodSpawnTiles.filter(([k, v]) =>
+            this.isPositionEmptyREAL(addPositions(currentRoom.position, k))
+        );
 
-        foodSpawnTiles[Math.floor(Math.random() * foodSpawnTiles.length)];
+        const chosenTile = emptyFoodSpawnTiles[Math.floor(Math.random() * emptyFoodSpawnTiles.length)][0];
 
-        // uh, couldn't find a spot? just slap it on the player, screw it
-        return { ...this.player.position };
+        return addPositions(currentRoom.position, chosenTile);
     }
 
     private cleanEntities() {
