@@ -103,16 +103,19 @@ interface StatsPageProps {
 }
 
 function StatsPage(props: StatsPageProps) {
-    return (<div>
+    return (
         <div>
-            Rooms Entered: {props.getGameState("roomsVisited").size} <br />
-            Max Length: {props.getGameState("maxLength")} <br />
-            Final Length: {props.getGameState("currentLength")} <br />
-            Enemies Killed: {props.getGameState("enemiesEaten")} <br />
-            Eggs Eaten: {props.getGameState("eggsEaten")} <br />
-            Distance Travelled: {props.getGameState("distanceTravelled")}
+            <div style={{ marginBottom: "32px" }}>
+                Rooms Entered: {props.getGameState("roomsVisited").size} <br />
+                Max Length: {props.getGameState("maxLength")} <br />
+                Final Length: {props.getGameState("currentLength")} <br />
+                Distance Travelled: {props.getGameState("distanceTravelled")} <br />
+                <br />
+                Eggs Eaten: {props.getGameState("eggsEaten")}
+                <br />
+                Enemies Killed: {props.getGameState("enemiesEaten")}
+            </div>
         </div>
-    </div>
     );
 }
 
@@ -124,10 +127,9 @@ function DeathDialog(props: DeathDialogProps) {
     return (
         <dialog open>
             <section>
-                <h2>Game Over</h2>
-                <StatsPage getGameState={props.getGameState}/>
-                <p>Try again?</p>
-                <button onClick={props.restart} autoFocus style={{ width: "130px" }}>
+                <h2>☠️ GAME OVER ☠️</h2>
+                <StatsPage getGameState={props.getGameState} />
+                <button onClick={props.restart} autoFocus style={{ width: "290px" }}>
                     Retry
                 </button>
             </section>
@@ -142,12 +144,9 @@ function PauseDialog(props: PauseDialogProps) {
     return (
         <dialog open>
             <section>
-                <p>[w][a][s][d] or arrow keys to move</p>
-                <p>collect and eat delicious eggs to regrow your flesh</p>
-                <p>eat enemies but avoid letting them hit you</p>
-                <p>don't run into yourself</p>
-                <button autoFocus onClick={props.unpause} style={{ width: "130px" }}>
-                    let's go
+                <h2>Paused</h2>
+                <button autoFocus onClick={props.unpause} style={{ width: "290px" }}>
+                    unpause
                 </button>
             </section>
         </dialog>
@@ -155,11 +154,23 @@ function PauseDialog(props: PauseDialogProps) {
 }
 
 function GameLoaded() {
+    const [bDoneIntro, setDoneIntro] = useState(false);
     const { gameWorld, getGameState, setGameState, restart } = useGameWorld();
     const isDead = getGameState("dead");
     const isPaused = getGameState("isPaused");
     return (
         <>
+            {!bDoneIntro && (
+                <Intro
+                    setDoneIntro={() => {
+                        setDoneIntro(true);
+                        setGameState("isPaused", false);
+                        if (!bgm.playing()) {
+                            bgm.play();
+                        }
+                    }}
+                />
+            )}
             <LeftInterface gameWorld={gameWorld} getGameState={getGameState} setGameState={setGameState} />
             <div className="CanvasContainer">
                 {isDead && <DeathDialog restart={restart} getGameState={getGameState} />}
@@ -167,9 +178,6 @@ function GameLoaded() {
                     <PauseDialog
                         unpause={() => {
                             setGameState("isPaused", false);
-                            if (!bgm.playing()) {
-                                bgm.play();
-                            }
                         }}
                     />
                 )}
@@ -186,6 +194,37 @@ function LoadGameDeps() {
     return <GameLoaded />;
 }
 
+import logoImageUrl from "#src/assets/intro/logo.png";
+interface IntroProps {
+    setDoneIntro: () => void;
+}
+function Intro(props: IntroProps) {
+    return (
+        <div className="Intro">
+            <div className="Door">
+                <img src={logoImageUrl} className="logo" />
+                <button onClick={props.setDoneIntro} className="DoorButton">
+                    Start Game
+                </button>
+            </div>
+            <div className="instructions">
+                <h2>How to Play</h2>
+                <br />
+                [w][a][s][d] or arrow keys to move
+                <br />
+                spacebar or esc button to pause
+                <br />
+                <br />
+                collect and eat delicious eggs to regrow your flesh
+                <br />
+                eat enemies but avoid letting them hit you
+                <br />
+                don't run into yourself
+                <p className="credits">A game by Zyrconium, LGPO, Theyflower, gqycloud, thristhart and TanVern</p>
+            </div>
+        </div>
+    );
+}
 export function Game() {
     return (
         <div className="Container">

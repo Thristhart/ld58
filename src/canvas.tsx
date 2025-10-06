@@ -27,7 +27,7 @@ function useFitCanvasToWindow(canvasRef: React.RefObject<HTMLCanvasElement | nul
     }, []);
 }
 
-function useDrawLoop(canvasRef: React.RefObject<HTMLCanvasElement | null>, gameWorld: GameWorld) {
+function useDrawLoop(canvasRef: React.RefObject<HTMLCanvasElement | null>, gameWorld: GameWorld | undefined) {
     useEffect(() => {
         if (!canvasRef.current) {
             return;
@@ -48,7 +48,9 @@ function useDrawLoop(canvasRef: React.RefObject<HTMLCanvasElement | null>, gameW
             const dt = timestamp - lastTimestamp;
             lastTimestamp = timestamp;
 
-            tickFrame(dt, canvas, context!, gameWorld);
+            if (gameWorld) {
+                tickFrame(dt, canvas, context!, gameWorld);
+            }
         }
 
         frameHandle = requestAnimationFrame(animationFrame);
@@ -58,7 +60,7 @@ function useDrawLoop(canvasRef: React.RefObject<HTMLCanvasElement | null>, gameW
 }
 
 interface CanvasProps {
-    gameWorld: GameWorld;
+    gameWorld: GameWorld | undefined;
 }
 export function Canvas(props: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);

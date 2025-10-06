@@ -8,7 +8,7 @@ Ship blockers:
 [x] Enemies should not spawn based on random poll, but instead spawn a specific number on random (enemyspawn) squares
 [x] Intro should have instructions/tutorial
 [ ] Game over screen
-[ ] Name (or justify Snakman)
+[x] Name (or justify Snakman)
 [x] Gain flesh over time?
 [x] Door num visuals
 [x] Use Tan's images
