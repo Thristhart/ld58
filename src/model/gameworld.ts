@@ -6,7 +6,7 @@ import { defaultGameState, GameState } from "./gamestate";
 import { RoomDefinition, RoomInstance, TileType } from "./room";
 import { Wall } from "./entities/wall";
 import { addPositions, Direction, getPositionInDirection, getRandomDirection } from "#src/direction.ts";
-import { ClosedDoor } from "./entities/door";
+import { ClosedDoor, OpenDoor } from "./entities/door";
 import { WingedEnemy } from "./entities/wingedenemy";
 import { Pickup } from "./entities/pickup";
 
@@ -54,7 +54,13 @@ export class GameWorld {
         this.rooms.add(room);
         room.definition.locations.forEach((tileType, location) => {
             const pos = addPositions(position, location);
-            // No matter what, don't splat stuff on existing tiles
+            // No matter what, don't splat stuff on existing tiles.... UNLESS, it's a wall on top of a door. Then we want to splat it, but also remove the door, I guess.
+            if (tileType === TileType.Wall) {
+                let doorsWhereWallsWillBe = [...this.getEntitiesAt(pos)].filter(
+                    (x) => x instanceof ClosedDoor || x instanceof OpenDoor
+                );
+                doorsWhereWallsWillBe.forEach((x) => this.removeEntity(x));
+            }
             if (!this.isPositionEmpty(pos)) {
                 return;
             }
